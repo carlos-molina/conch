@@ -1,0 +1,117 @@
+package ExampleContract
+
+# Import Java classes for EROP support
+import uk.ac.ncl.erop.*;
+
+# Global variables (persistent objects passed from outside)
+global RelevanceEngine engine;
+global EventLogger logger;
+
+global RolePlayer buyer;
+global RolePlayer seller;
+global ROPSet ropBuyer;
+global ROPSet ropSeller;
+global TimingMonitor timingMonitor;
+
+
+global BusinessOperation buyRequest;
+global BusinessOperation payment;
+global BusinessOperation buyConfirmation;
+global BusinessOperation buyRejection;
+global BusinessOperation cancelation;
+
+global Responder responder;
+
+# Rule 0: initialize the ROP sets for buyer and seller.
+# This rule is launched only when the contract is set up.
+# In this limited scenario the seller has no ROP, but the buyer
+# starts with the right to submit a buy request.
+
+rule "Initialization"
+	when
+		$e: Event (type == "init")
+	then
+		System.out.println("* Initialization when");
+		# Add buyer's right to submit an order
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+		System.out.println("* Initialization rule triggered");
+		responder.setContractCompliant(true);
+end
+
+# Rule 1: having received a Buy Request event from the buyer, his right to submit another
+# is temporarily revoked until the current one is completed. The seller gains
+# an obligation to either accept or reject the Buy Request.
+rule "Buy Request Received"
+	when
+		# Verify type of event, originator, and responder
+		$e: Event(type=="BuyRequest", originator=="buyer", responder=="seller", status=="success")
+		eval(ropBuyer.matchesRights(buyRequest))
+	then
+		# Remove buyer's right to place other Buy Requests
+		ropBuyer.removeRight(buyRequest, seller);
+		# Add seller's obligation to either accept or reject order
+		BusinessOperation[] bos = {buyConfirmation, buyRejection};
+		ropSeller.addObligation("React To Buy Request", bos, buyer, 3);
+		System.out.println("* Buy Request Received rule triggered");
+		responder.setContractCompliant(true);
+end
+
+# Rule 2: having received a reject Buy Request event from the seller, the pending obligation
+# is satisfied. Restore buyer's right to submit Buy Requests.#
+rule "Buy Request Rejected"
+	when
+		$e: Event(type=="BuyReject", originator=="seller", responder=="buyer", status=="success")
+		eval(ropSeller.matchesObligations("React To Buy Request"));
+	then
+		# Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Buy Request", buyer);
+		# Restore buyer's right to submit other Buy Requests
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+		System.out.println("* Buy Request Rejected rule triggered");
+		responder.setContractCompliant(true);
+end
+
+# Rule 3: having received an accept Buy Request event from the seller, the pending obligation
+# is satisfied. New obligation on buyer to pay seller.
+rule "Buy Request Accepted"
+	when
+		$e: Event(type=="BuyConfirmation", originator=="seller", responder=="buyer", status=="success")
+		eval(ropSeller.matchesObligations("React To Buy Request"));
+	then
+		# Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Buy Request", buyer);
+		# Add new obligation for buyer to pay a bill to the seller within 7 days!
+		ropBuyer.addObligation(payment, seller, 7);
+		System.out.println("* Buy Request Accepted rule triggered");
+		responder.setContractCompliant(true);
+end
+
+# Rule 4: the obligation to react to the buyer's BuyRequest times out. The obligation
+# is now irrelevant -  timeout is treated as a refusal.
+rule "React To Buy Request Timeout"
+	when
+		$e: Event(type=="BuyRequestTimeout", originator=="seller", responder=="buyer")
+		eval(ropSeller.matchesObligations("React To Buy Request"));
+	then
+		# Seller's Obligation is irrelevant, remove it
+		ropSeller.removeObligation("React To Buy Request", buyer);
+		# Restore buyer's right to submit other Buy Requests
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+		System.out.println("* React To Buy Request Timeout rule triggered");
+		responder.setContractCompliant(true);
+end
+
+# Rule 5: buyer pays. Obligation satisfied, The buyer regains the right to submit Buy Requests.
+rule "Payment Received"
+	when
+		$e: Event(type=="Payment", originator=="buyer", responder=="seller", status=="success")
+		eval(ropBuyer.matchesObligations(payment))
+	then
+		# Buyer's Obligation is satiasfied, remove it.
+		ropBuyer.removeObligation(payment, seller);
+		# Restore buyer's right to submit other Buy Requests
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+		System.out.println("* Payment rule triggered");
+		responder.setContractCompliant(true);
+end
+

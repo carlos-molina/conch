@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/ncmj2/!svn/ver/2/CCCRestClient/src/resources
+END
+hornetq-configuration.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/ncmj2/!svn/ver/2/CCCRestClient/src/resources/hornetq-configuration.xml
+END
+hornetq-client.xml
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/ncmj2/!svn/ver/2/CCCRestClient/src/resources/hornetq-client.xml
+END
+hornetq-users.xml
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/ncmj2/!svn/ver/2/CCCRestClient/src/resources/hornetq-users.xml
+END
+jndi.properties
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/ncmj2/!svn/ver/2/CCCRestClient/src/resources/jndi.properties
+END
+hornetq-jms.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/ncmj2/!svn/ver/2/CCCRestClient/src/resources/hornetq-jms.xml
+END

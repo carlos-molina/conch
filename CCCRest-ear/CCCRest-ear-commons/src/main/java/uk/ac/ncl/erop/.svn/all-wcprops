@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop
+END
+TimingMonitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/TimingMonitor.java
+END
+ROPSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/ROPSet.java
+END
+ErrorMessageManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/ErrorMessageManager.java
+END
+DateParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/DateParser.java
+END
+EventLogger.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/EventLogger.java
+END
+Prohibition.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/Prohibition.java
+END
+BusinessOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/BusinessOperation.java
+END
+CompositeObligation.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/CompositeObligation.java
+END
+Responder.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/Responder.java
+END
+CCCExperiment.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/CCCExperiment.java
+END
+TimeKeeper.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/TimeKeeper.java
+END
+Obligation.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/Obligation.java
+END
+Right.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/Right.java
+END
+RelevanceEngine.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/RelevanceEngine.java
+END
+Event.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/Event.java
+END
+EropDbConstValues.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/EropDbConstValues.java
+END
+Deadline.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/Deadline.java
+END
+MessageLogger.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/MessageLogger.java
+END
+RolePlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/RolePlayer.java
+END
+ROPEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/ROPEntity.java
+END

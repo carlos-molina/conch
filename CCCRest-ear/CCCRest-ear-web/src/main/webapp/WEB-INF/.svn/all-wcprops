@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-web/src/main/webapp/WEB-INF
+END
+hornetq-configuration.xml
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-web/src/main/webapp/WEB-INF/hornetq-configuration.xml
+END
+faces-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-web/src/main/webapp/WEB-INF/faces-config.xml
+END
+hornetq-jms.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-web/src/main/webapp/WEB-INF/hornetq-jms.xml
+END
+beans.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-web/src/main/webapp/WEB-INF/beans.xml
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/ncmj2/!svn/ver/4/CCCRest-ear/CCCRest-ear-web/src/main/webapp/WEB-INF/web.xml
+END

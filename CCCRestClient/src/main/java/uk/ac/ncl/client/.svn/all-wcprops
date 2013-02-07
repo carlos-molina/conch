@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/ncmj2/!svn/ver/2/CCCRestClient/src/main/java/uk/ac/ncl/client
+END
+RESTClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/ncmj2/!svn/ver/2/CCCRestClient/src/main/java/uk/ac/ncl/client/RESTClient.java
+END
+BusinessEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/ncmj2/!svn/ver/2/CCCRestClient/src/main/java/uk/ac/ncl/client/BusinessEvent.java
+END
+EventDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/ncmj2/!svn/ver/2/CCCRestClient/src/main/java/uk/ac/ncl/client/EventDTO.java
+END
+CCCResponse.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/ncmj2/!svn/ver/2/CCCRestClient/src/main/java/uk/ac/ncl/client/CCCResponse.java
+END

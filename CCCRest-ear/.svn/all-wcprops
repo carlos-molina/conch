@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/ncmj2/!svn/ver/3/CCCRest-ear
+END
+readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/ncmj2/!svn/ver/4/CCCRest-ear/readme.txt
+END
+pom.xml
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/ncmj2/!svn/ver/4/CCCRest-ear/pom.xml
+END
+run.sh
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/ncmj2/!svn/ver/4/CCCRest-ear/run.sh
+END
+sample-contract-clauses.txt
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/ncmj2/!svn/ver/4/CCCRest-ear/sample-contract-clauses.txt
+END

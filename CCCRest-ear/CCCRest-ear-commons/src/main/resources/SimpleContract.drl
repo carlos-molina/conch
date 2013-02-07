@@ -1,0 +1,197 @@
+# Simple Contract - a limited version of the buyer-seller scenario
+# developed for testing purposes
+
+package SimpleContract
+
+# Import Java classes for EROP support
+import uk.ac.ncl.erop.*;
+
+# Global variables (persistent objects passed from outside)
+global RelevanceEngine engine;
+global EventLogger logger;
+
+global RolePlayer buyer;
+global RolePlayer seller;
+global RolePlayer player;
+global ROPSet ropBuyer;
+global ROPSet ropSeller;
+global TimingMonitor timingMonitor;
+
+
+global BusinessOperation purchaseOrder;
+global BusinessOperation finePayment;
+global BusinessOperation payment;
+global BusinessOperation poAcceptance;
+global BusinessOperation poRejection;
+global BusinessOperation goodsDelivery;
+#global BusinessOperation anyOperation;
+
+# Rule 0: initialize the ROP sets for buyer and seller.
+# This rule is launched only when the contract is set up.
+# In this limited scenario the seller has no ROP, but the buyer
+# starts with the right to submit a purchase order.
+rule "Initialization"
+	when
+		$e: Event (type == "init")
+	then 
+		System.out.println("* Initialization when");
+		# Add buyer's right to submit an order
+		ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* Initialization rule triggered");
+end
+
+# Rule 1: having received a purchase order event from the buyer, his right to submit another
+# is temporarily revoked until the current one is completed. The seller gains
+# an obligation to either accept or reject the purchase order.
+rule "Purchase Order Received"
+	when
+		# Verify type of event, originator, and responder
+		$e: Event(type=="Purchase Order", originator=="buyer", responder=="seller", status=="success")
+		eval(ropBuyer.matchesRights(purchaseOrder))
+	then
+		# Remove buyer's right to place other purchase orders
+		ropBuyer.removeRight(purchaseOrder, seller);
+		# Add seller's obligation to either accept or reject order
+		BusinessOperation[] bos = {poAcceptance, poRejection};
+		ropSeller.addObligation("React To Purchase Order", bos, buyer, 3);
+		System.out.println("* Purchase Order Received rule triggered");
+end
+
+# Rule 2: having received a reject PO event from the seller, the pending obligation
+# is satisfied. Restore buyer's right to submit POs.#
+rule "Purchase Order Rejected"
+	when
+		$e: Event(type=="Purchase Order Rejection", originator=="seller", responder=="buyer",status=="success")
+		eval(ropSeller.matchesObligations("React To Purchase Order"));
+	then
+		# Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Purchase Order", buyer);
+		# Restore buyer's right to submit other purchase orders
+		ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* Purchase Order Rejected rule triggered");
+end
+
+# Rule 3: having received an accept PO event from the seller, the pending obligation
+# is satisfied. New obligation on buyer to pay seller.
+rule "Purchase Order Accepted"
+	when
+		$e: Event(type=="Purchase Order Acceptance", originator=="seller", responder=="buyer",status=="success")
+		eval(ropSeller.matchesObligations("React To Purchase Order"));
+	then
+		# Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Purchase Order", buyer);
+		# Add new obligation for buyer to pay a bill to the seller within 3 SECONDS!
+		ropBuyer.addObligation(payment, seller, 3);
+		System.out.println("* Purchase Order Accepted rule triggered");
+end
+
+# Rule 4: the obligation to react to the buyer's PO times out. The obligation
+# is now irrelevant -  timeout is treated as a refusal. 
+rule "React To Purchase Order Timeout"
+	when
+		$e: Event(type=="React To Purchase Order Timeout",originator=="seller",responder=="buyer")
+		eval(ropSeller.matchesObligations("React To Purchase Order"));
+	then
+		# Seller's Obligation is irrelevant, remove it
+		ropSeller.removeObligation("React To Purchase Order", buyer);
+		# Restore buyer's right to submit other purchase orders
+		ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* React To Purchase Order Timeout rule triggered");
+end
+
+# Rule 5: buyer pays. Obligation satisfied, new obligation on seller to deliver goods.
+rule "Payment Received"
+	when
+		$e: Event(type=="Payment",originator=="buyer",responder=="seller",status=="success")
+		eval(ropBuyer.matchesObligations(payment))
+	then
+		# Buyer's Obligation is satiasfied, remove it.
+		ropBuyer.removeObligation(payment, seller);
+		# new Obligation to the seller to deliver goods within 3 seconds.
+		ropSeller.addObligation(goodsDelivery, buyer, 3);
+		System.out.println("* Payment rule triggered");
+end
+
+# Rule 6: buyer does not pay. He is fined and does NOT regain the right to submit POs.
+rule "Payment Timeout"
+	when
+		$e: Event(type=="Payment Timeout",originator=="buyer",responder=="seller")
+		eval(ropBuyer.matchesObligations(payment));
+	then
+		# Seller's Obligation is irrelevant, remove it
+		ropBuyer.removeObligation("Payment", seller);
+		# Impose an obligation on the buyer to pay a fine within 3 seconds
+		ropBuyer.addObligation(finePayment, seller, 3);
+		System.out.println("* Payment Timeout rule triggered");
+end
+
+# Rule 7: seller delivers the goods, satisfies his obligation. Buyer regains
+# right to place purchase orders.
+rule "Goods Delivery"
+	when
+		$e: Event(type=="Goods Delivery",originator=="seller",responder=="buyer",status=="success")
+		eval(ropSeller.matchesObligations(goodsDelivery))
+	then
+		# Seller's Obligation is satisfied, remove it.
+		ropSeller.removeObligation(goodsDelivery, buyer);
+		# Restore buyer's right to submit other purchase orders
+		ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* Goods Delivery rule triggered");
+end
+
+# Rule 8: seller does NOT deliver the goods, earning a fine. 
+# Buyer does NOT regain the right to submit POs.
+rule "Goods Delivery Timeout"
+	when
+		$e: Event(type=="Goods Delivery Timeout",originator=="seller",responder=="buyer")
+		eval(ropSeller.matchesObligations(goodsDelivery))
+	then
+		# Seller's Obligation is now irrelevant, remove it.
+		ropSeller.removeObligation(goodsDelivery, buyer);
+		# Impose fine on seller, to pay within 3 seconds
+		ropSeller.addObligation(finePayment, buyer, 3);
+		System.out.println("* Goods Delivery Timeout rule triggered");
+end
+
+# Rule 9a: buyer pays the fine and had less than three fines.
+# He regains the right to submit POs.
+rule "Buyer Fine Payment, Less Than 3 Fines"
+	when
+		$e: Event(type=="Fine Payment",originator=="buyer",responder=="seller",status=="success")
+		eval(ropBuyer.matchesObligations(finePayment))
+		eval(logger.countHappened("Payment Timeout", null, "buyer", "seller", "timeout")<3)
+	then
+		# Remove satisfied obligation to pay fine
+		ropBuyer.removeObligation(finePayment, seller);
+		# Restore buyer's right to submit other purchase orders
+		ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* Buyer Fine Payment (Less Than 3 Fines) rule triggered");
+end
+
+# Rule 9b: buyer pays the fine but has three fines or more.
+# He does NOT regain the right to submit POs.
+rule "Buyer Fine Payment, More Than 3 Fines"
+	when
+		$e: Event(type=="Fine Payment",originator=="buyer",responder=="seller",status=="success")
+		eval(ropBuyer.matchesObligations(finePayment))
+		eval(logger.countHappened("Payment Timeout", null, "buyer", "seller", "timeout")>=3)
+	then
+		# Remove satisfied obligation to pay fine
+		ropBuyer.removeObligation(finePayment, seller);
+		# Do NOT Restore buyer's right to submit other purchase orders
+		#ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* Buyer Fine Payment (More Than 3 Fines) rule triggered");
+end
+
+# Rule 10: seller pays the fine. The buyer regains the right to submit POs.
+rule "Seller Fine Payment"
+	when
+		$e: Event(type=="Fine Payment",originator=="seller",responder=="buyer",status=="success")
+		eval(ropSeller.matchesObligations(finePayment))
+	then
+		# Remove satisfied obligation to pay fine
+		ropSeller.removeObligation(finePayment, buyer);
+		# Restore buyer's right to submit other purchase orders
+		ropBuyer.addRight(purchaseOrder, seller, (String)null);
+		System.out.println("* Seller Fine Payment rule triggered");
+end
