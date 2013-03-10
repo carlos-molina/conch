@@ -40,7 +40,6 @@ import uk.ac.ncl.model.RuleFilesEnum;
 @Path("/file")
 public class UploadFileService {
 
-
 	/**
 	 * uploads a file to server instance.
 	 * @uml.property  name="uriInfo"
@@ -48,8 +47,9 @@ public class UploadFileService {
 	 */
 	@Context
 	UriInfo uriInfo;
+    private final String uploadDir = RuleFilesEnum.SIMPLE_CONTRACT.getRulesFolderPath();
 
-	/**
+    /**
 	 * Upload file.
 	 *
 	 * @param input
@@ -59,8 +59,8 @@ public class UploadFileService {
 	@POST
 	@Path("/upload")
 	@Consumes("multipart/form-data")
-	@Produces({ MediaType.TEXT_HTML })
-	public ResponseBuilder uploadFile(MultipartFormDataInput input) {
+	@Produces({ MediaType.TEXT_PLAIN })
+	public Response uploadFile(MultipartFormDataInput input) {
 
 		String fileName = "";
 
@@ -84,21 +84,17 @@ public class UploadFileService {
 
 				writeFile(bytes, fileName);
 
-				System.out.println("Done");
-
 			} catch (IOException e) {
 				e.printStackTrace();
+                ResponseBuilder builder = Response.serverError();
+                return builder.build();
+
 			}
 
 		}
 
-		UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-		// String warName = .getContextPath();
-		// TODO improve how we handle paths
-		java.net.URI userUri = ub.replacePath("CCCRest/UploadForm.html").build();
-		System.out.println("uri: " + userUri);
-		return Response.seeOther(userUri);
-		// return Response.status(200).entity("").build();
+        ResponseBuilder builder = Response.ok("Rule file "+fileName+" saved ");
+		 return builder.build();
 
 	}
 
@@ -146,8 +142,7 @@ public class UploadFileService {
 			file.createNewFile();
 		}
 
-		String uploadDir = RuleFilesEnum.SIMPLE_CONTRACT.getRulesFolderPath();
-		System.out.println("writeFile to : " + uploadDir);
+        System.out.println("write Rule File to path : " + uploadDir);
 
 		FileOutputStream fop = new FileOutputStream(uploadDir + "/" + file);
 
