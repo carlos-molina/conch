@@ -15,9 +15,6 @@ import java.util.Date;
  * into dates according to a specific format, thus avoiding
  * rewriting the same code over and over again
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 10 $$, $$Date: 2012-09-25 17:00:29 +0100 (Tue, 25 Sep 2012) $$
  */
 public class DateParser {
 

@@ -13,10 +13,6 @@ import java.text.DateFormat;
 /**
  * The Class Event. Instances of this class represent (composite) events.
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 10 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep
- *          2012) $$
  */
 public class Event {
 

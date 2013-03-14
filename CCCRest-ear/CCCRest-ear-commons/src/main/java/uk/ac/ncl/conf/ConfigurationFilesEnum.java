@@ -7,10 +7,6 @@ package uk.ac.ncl.conf;
  * The Enum ConfigurationFilesEnum holds all the file paths and configuration
  *  files for CCC
  *
- * @author <a href="mailto:giannis.sfyrakis@cazoomi.com">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: b1049501 $$
- * @version $$Revision: 416 $$, $$Date: 2012-07-26 19:37:45 +0100 (Thu, 26 Jul
- *          2012) $$
  */
 public enum ConfigurationFilesEnum {
 

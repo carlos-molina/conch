@@ -13,9 +13,6 @@ import java.util.Date;
  * Instances of this class are entities stored in ROP Sets:
  * Rights, Obligations, Prohibitions
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 10 $$, $$Date: 2012-09-25 17:00:29 +0100 (Tue, 25 Sep 2012) $$
  */
 public class ROPEntity {
 

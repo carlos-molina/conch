@@ -9,9 +9,6 @@ package uk.ac.ncl.erop;
  * 
  * INstances of this class represent role players in the system
  *
- * @author <a href="mailto:i.sfyrakis@nlc.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep 2012) $$
  */
 public class RolePlayer {
 	private String name = null;

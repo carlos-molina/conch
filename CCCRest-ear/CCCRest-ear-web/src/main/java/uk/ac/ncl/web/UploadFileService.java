@@ -33,17 +33,13 @@ import uk.ac.ncl.model.RuleFilesEnum;
 /**
  * The Class UploadFileService.
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep 2012) $$
  */
 @Path("/file")
 public class UploadFileService {
 
 	/**
 	 * uploads a file to server instance.
-	 * @uml.property  name="uriInfo"
-	 * @uml.associationEnd  readOnly="true"
+
 	 */
 	@Context
 	UriInfo uriInfo;

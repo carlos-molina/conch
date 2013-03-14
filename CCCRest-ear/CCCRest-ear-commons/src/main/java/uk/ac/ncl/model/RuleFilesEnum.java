@@ -6,10 +6,6 @@ package uk.ac.ncl.model;
 /**
  * The Enum RuleFilesEnum holds all the file path for each sample contract.
  *
- * @author <a href="mailto:giannis.sfyrakis@cazoomi.com">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 10 $$, $$Date: 2012-07-26 19:37:45 +0100 (Thu, 26 Jul
- *          2012) $$
  */
 public enum RuleFilesEnum {
 

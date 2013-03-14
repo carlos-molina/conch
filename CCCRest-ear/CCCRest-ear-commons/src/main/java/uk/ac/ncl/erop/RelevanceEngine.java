@@ -36,10 +36,6 @@ import uk.ac.ncl.xml.CCCResponse;
  * The Class RelevanceEngine. Instances of this class are wrappers around the
  * Drools Rule Engine
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 10 $$, $$Date: 2012-07-23 14:25:44 +0100 (Mon, 23 Jul
- *          2012) $$
  */
 public class RelevanceEngine {
 
