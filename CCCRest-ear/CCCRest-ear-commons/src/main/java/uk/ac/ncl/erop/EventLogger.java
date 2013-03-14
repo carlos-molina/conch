@@ -1,15 +1,5 @@
-/*
- *
- */
 package uk.ac.ncl.erop;
-//
 
-//
-// Instances of this class represent an Event Logger entity that receives
-// events, stores them in a database and answers queries about them.
-//
-
-//import java.util.*;
 import java.sql.*;
 
 import javax.persistence.EntityManager;
@@ -22,7 +12,8 @@ import uk.ac.ncl.util.Resources;
 
 /**
  * The Class EventLogger.
- *
+ * Instances of this class represent an Event Logger entity that receives
+ * events, stores them in a database and answers queries about them.
  */
 public class EventLogger {
 	private final static Logger log = Logger.getLogger(EventLogger.class.toString());

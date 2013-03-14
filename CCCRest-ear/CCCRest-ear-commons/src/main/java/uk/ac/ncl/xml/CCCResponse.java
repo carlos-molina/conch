@@ -19,7 +19,7 @@ public class CCCResponse implements Serializable{
 	}
 
 	public CCCResponse() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@XmlElement

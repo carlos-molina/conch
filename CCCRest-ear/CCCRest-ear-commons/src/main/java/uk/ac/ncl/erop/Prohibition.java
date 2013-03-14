@@ -1,15 +1,12 @@
-/*
- * 
- */
 package uk.ac.ncl.erop;
 
-// Instances of this class are prohibitions granted to role players.
 
 import java.util.Date;
 
 
 /**
  * The Class Prohibition.
+ * Instances of this class are prohibitions granted to role players.
  *
  */
 public class Prohibition extends ROPEntity {

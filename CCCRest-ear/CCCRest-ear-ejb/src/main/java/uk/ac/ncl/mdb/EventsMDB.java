@@ -47,10 +47,7 @@ import uk.ac.ncl.util.Resources;
 
 /**
  * The Class EventsMDB.
- *
- * @author <a href="mailto:giannis.sfyrakis@cazoomi.com">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: b1049501 $$
- * @version $$Revision: 422 $$, $$Date: 2012-12-14 02:33:47 +0200 (Fri, 14 Dec 2012) $$
+ *  Message Driven Bean for Business Events
  */
 @MessageDriven(name = "EventsMDB", activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),

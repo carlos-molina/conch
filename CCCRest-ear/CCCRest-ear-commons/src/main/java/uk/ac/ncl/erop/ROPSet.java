@@ -1,18 +1,15 @@
-/*
- *
- */
+
 package uk.ac.ncl.erop;
 
-// ROPSet class
-// An instance of this class represent the ROP set of a single role player:
-// the set of rights, obligations and prohibitions currently in force
-// for that role player.
 
 import java.text.*;
 import java.util.*;
 
 /**
  * The Class ROPSet.
+ * An instance of this class represent the ROP set of a single role player:
+ * the set of rights, obligations and prohibitions currently in force
+ * for that role player.
  *
  */
 public class ROPSet {

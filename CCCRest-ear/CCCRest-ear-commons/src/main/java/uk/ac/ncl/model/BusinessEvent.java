@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package uk.ac.ncl.model;
 
 import java.io.Serializable;

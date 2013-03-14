@@ -1,6 +1,3 @@
-/*
- * 
- */
 package uk.ac.ncl.erop;
 
 import java.util.logging.Logger;

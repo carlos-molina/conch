@@ -1,6 +1,3 @@
-/*
- * 
- */
 package uk.ac.ncl.erop;
 
 import java.text.DateFormat;
@@ -8,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
 
-// This class is used to log messages on screen and on file.
 
 /**
  * The Class MessageLogger.

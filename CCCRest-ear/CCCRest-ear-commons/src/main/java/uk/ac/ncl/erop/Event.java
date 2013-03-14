@@ -1,17 +1,11 @@
-/*
- *
- */
 package uk.ac.ncl.erop;
-
-// Instances of this class represent (composite) events.
-// Massimo Strano, Newcastle University, 2008.
-//
 
 import java.util.Date;
 import java.text.DateFormat;
 
 /**
  * The Class Event. Instances of this class represent (composite) events.
+ * Instances of this class represent (composite) events.
  *
  */
 public class Event {
