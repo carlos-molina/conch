@@ -26,7 +26,7 @@
 
 	<properties>
 
-		<drools.version>5.4.0.Final</drools.version>
+		<drools.version>5.5.0.Final</drools.version>
 		<!-- Explicitly declaring the source encoding eliminates the following
 			message: -->
 		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered
