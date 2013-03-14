@@ -10,29 +10,30 @@ import org.jboss.logging.Logger;
 import uk.ac.ncl.xml.CCCResponse;
 
 /**
- * The Class CCCExperiment.
+ * The Class ContractComplianceChecker.
  *
  * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
  * @author last edited by: $$Author: gsfyrakis $$
  * @version $$Revision: 10 $$, $$Date: 2012-07-23 14:25:44 +0100 (Mon, 23 Jul
  *          2012) $$
  */
-public class CCCExperiment {
+public class ContractComplianceChecker {
 
-	private static CCCExperiment instance = null;
+	private static ContractComplianceChecker instance = null;
 
-	private final static Logger log = Logger.getLogger(CCCExperiment.class.toString());
+	private final static Logger log = Logger.getLogger(ContractComplianceChecker.class.toString());
 
 	/**
-	 * Creates the ccc experiment.
-	 *
+	 * Creates a new Contract Compliance Checker
+	 * If a CCC is created return the current instance
+     *
 	 * @param filepath
 	 *            the filepath
-	 * @return the cCC experiment
+	 * @return the CCC instance
 	 */
-	public static CCCExperiment createCCCExperiment(String filepath) {
+	public static ContractComplianceChecker createContractComplianceChecker(String filepath) {
 		if (instance == null) {
-			instance = new CCCExperiment(filepath);
+			instance = new ContractComplianceChecker(filepath);
 			return instance;
 		} else {
 			return instance;
@@ -51,12 +52,12 @@ public class CCCExperiment {
 	private EventLogger logger = null;
 
 	/**
-	 * Instantiates a new cCC experiment.
+	 * Instantiates a new Contract Compliance Checker
 	 *
 	 * @param filepath
 	 *            the filepath
 	 */
-	private CCCExperiment(String filepath) {
+	private ContractComplianceChecker(String filepath) {
 
 		log.info("Initializing objects...");
 
@@ -168,7 +169,6 @@ public class CCCExperiment {
 			try {
 				Thread.sleep(4200);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				ErrorMessageManager.fatalErrorMsg("Interrupted while waiting", e);
 			}
 

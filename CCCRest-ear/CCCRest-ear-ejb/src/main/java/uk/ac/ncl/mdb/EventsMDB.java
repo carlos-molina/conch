@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.BytesMessage;
@@ -21,7 +20,6 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -33,9 +31,8 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.hornetq.jms.client.HornetQBytesMessage;
-import org.jboss.ejb3.annotation.ResourceAdapter;
 
-import uk.ac.ncl.erop.CCCExperiment;
+import uk.ac.ncl.erop.ContractComplianceChecker;
 import uk.ac.ncl.erop.Event;
 import uk.ac.ncl.model.BusinessEvent;
 import uk.ac.ncl.model.RuleFilesEnum;
@@ -54,7 +51,7 @@ public class EventsMDB implements MessageListener {
 	@PersistenceContext(unitName = "RopePU")
 	private EntityManager em;
 
-	private static CCCExperiment ccc;
+	private static ContractComplianceChecker ccc;
 	private List<Event> events = new ArrayList<Event>();
 
 	/**
@@ -76,7 +73,7 @@ public class EventsMDB implements MessageListener {
 
 				BusinessEvent bEvent = receiveBusinessEventMsg(rcvMessage);
 
-				ccc = CCCExperiment.createCCCExperiment(RuleFilesEnum.BUYER_STORE_CONTRACT.getRuleFilePath());
+				ccc = ContractComplianceChecker.createContractComplianceChecker(RuleFilesEnum.BUYER_STORE_CONTRACT.getRuleFilePath());
 
 				Event event;
 				List<CCCResponse> responses;
@@ -120,10 +117,8 @@ public class EventsMDB implements MessageListener {
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		} catch (JAXBException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -260,7 +255,6 @@ public class EventsMDB implements MessageListener {
 			bos.close();
 			bytes = bos.toByteArray();
 		} catch (IOException ex) {
-			// TODO: Handle the exception
 		}
 		return bytes;
 	}
