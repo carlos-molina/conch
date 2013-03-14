@@ -56,6 +56,7 @@ public class ContractComplianceChecker {
 	private ContractComplianceChecker(String filepath) {
 
 		log.info("Initializing objects...");
+        log.info("filepath: " +filepath);
 
 		logger = new EventLogger();
 
