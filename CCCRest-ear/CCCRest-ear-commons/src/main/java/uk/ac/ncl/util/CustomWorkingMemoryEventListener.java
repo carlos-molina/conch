@@ -3,12 +3,12 @@
  */
 package uk.ac.ncl.util;
 
+import java.util.logging.Logger;
+
 import org.drools.event.rule.ObjectInsertedEvent;
 import org.drools.event.rule.ObjectRetractedEvent;
 import org.drools.event.rule.ObjectUpdatedEvent;
 import org.drools.event.rule.WorkingMemoryEventListener;
-
-import java.util.logging.Logger;
 
 public class CustomWorkingMemoryEventListener implements WorkingMemoryEventListener {
 	

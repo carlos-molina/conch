@@ -3,13 +3,24 @@
  */
 package uk.ac.ncl.util;
 
+import java.util.logging.Logger;
+
 import org.drools.WorkingMemory;
 import org.drools.event.AgendaEventListener;
 import org.drools.event.RuleFlowGroupActivatedEvent;
 import org.drools.event.RuleFlowGroupDeactivatedEvent;
-import org.drools.event.rule.*;
+import org.drools.event.rule.ActivationCancelledEvent;
+import org.drools.event.rule.ActivationCreatedEvent;
+import org.drools.event.rule.AfterActivationFiredEvent;
+import org.drools.event.rule.AgendaGroupPoppedEvent;
+import org.drools.event.rule.AgendaGroupPushedEvent;
+import org.drools.event.rule.BeforeActivationFiredEvent;
+import org.drools.event.rule.ObjectInsertedEvent;
+import org.drools.event.rule.ObjectRetractedEvent;
+import org.drools.event.rule.ObjectUpdatedEvent;
+import org.drools.event.rule.WorkingMemoryEventListener;
 
-import java.util.logging.Logger;
+import uk.ac.ncl.util.CustomWorkingMemoryEventListener;
 
 public class CustomAgendaEventListener implements AgendaEventListener, WorkingMemoryEventListener {
 	private final static Logger logger = Logger.getLogger(CustomAgendaEventListener.class.toString());

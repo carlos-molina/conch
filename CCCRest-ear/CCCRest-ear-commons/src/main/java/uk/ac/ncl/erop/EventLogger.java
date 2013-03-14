@@ -240,7 +240,6 @@ public class EventLogger {
 	 * Count happened.
 	 * Query the historical database
 	 * NOTE: I assume that the String timeConstraints is in acceptable
-	 * format an SQL query.
 	 *
 	 * @param eventType the event type
 	 * @param timeConstraints the time constraints
@@ -273,5 +272,8 @@ public class EventLogger {
 		return executeCountingQuery(query);
 	}
 
+	public void debug(String message) {
+		log.info(message);
+	}
 
 }

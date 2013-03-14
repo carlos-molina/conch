@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.BytesMessage;
@@ -20,6 +21,7 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -29,16 +31,27 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 
 import org.hornetq.jms.client.HornetQBytesMessage;
 
 import uk.ac.ncl.erop.ContractComplianceChecker;
 import uk.ac.ncl.erop.Event;
 import uk.ac.ncl.model.BusinessEvent;
-import uk.ac.ncl.model.RuleFilesEnum;
+import uk.ac.ncl.conf.ConfigurationFilesEnum;
 import uk.ac.ncl.util.Resources;
 import uk.ac.ncl.xml.CCCResponse;
+import uk.ac.ncl.util.Resources;
 
+
+/**
+ * The Class EventsMDB.
+ *
+ * @author <a href="mailto:giannis.sfyrakis@cazoomi.com">Ioannis Sfyrakis</a>
+ * @author last edited by: $$Author: b1049501 $$
+ * @version $$Revision: 422 $$, $$Date: 2012-12-14 02:33:47 +0200 (Fri, 14 Dec 2012) $$
+ */
 @MessageDriven(name = "EventsMDB", activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/events"),
@@ -48,6 +61,8 @@ public class EventsMDB implements MessageListener {
 	private final static Logger log = Logger.getLogger(EventsMDB.class.toString());
 	private String payloadXML;
 
+	private BusinessEvent bEvent;
+	
 	@PersistenceContext(unitName = "RopePU")
 	private EntityManager em;
 
@@ -71,10 +86,10 @@ public class EventsMDB implements MessageListener {
 				log.info("Received my resource: " + res);
 			} else if (rcvMessage instanceof BytesMessage) {
 
-				BusinessEvent bEvent = receiveBusinessEventMsg(rcvMessage);
+				bEvent = receiveBusinessEventMsg(rcvMessage);
 
-				ccc = ContractComplianceChecker.createContractComplianceChecker(RuleFilesEnum.BUYER_STORE_CONTRACT.getRuleFilePath());
-
+				ccc = ContractComplianceChecker.createContractComplianceChecker(ConfigurationFilesEnum.CHANGESET_XML.getConfigurationFilePath());
+				
 				Event event;
 				List<CCCResponse> responses;
 				CCCResponse cccResponse = new CCCResponse();
@@ -87,23 +102,6 @@ public class EventsMDB implements MessageListener {
 
 				event = getEvent(bEvent);
 				log.info("event: " + event);
-//
-//				if (bEvent.getType() == "reset") {
-//
-//					events.add(getEvent(bEvent));
-//					responses = ccc.continueSimulation(events);
-//
-//					for (CCCResponse response: responses) {
-//						log.info("cccResponse: " + response);
-//
-//						sendResponse(response);
-//					}
-//
-//				} else {
-//					events.add(getEvent(bEvent));
-//
-//				}
-
 
 				cccResponse = processCCCEvent(event);
 

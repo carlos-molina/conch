@@ -5,15 +5,31 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import org.drools.*;
+import org.drools.agent.KnowledgeAgent;
+import org.drools.agent.KnowledgeAgentConfiguration;
+import org.drools.agent.KnowledgeAgentFactory;
 import org.drools.builder.KnowledgeBuilder;
 import org.drools.builder.KnowledgeBuilderErrors;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
+import org.drools.common.InternalWorkingMemoryEntryPoint;
 import org.drools.compiler.*;
+import org.drools.conf.MBeansOption;
 import org.drools.definition.KnowledgePackage;
+import org.drools.definition.rule.Global;
+import org.drools.io.ResourceChangeScannerConfiguration;
 import org.drools.io.ResourceFactory;
+import org.drools.logger.KnowledgeRuntimeLogger;
+import org.drools.logger.KnowledgeRuntimeLoggerFactory;
+import org.drools.runtime.Globals;
+import org.drools.runtime.KnowledgeSessionConfiguration;
 import org.drools.runtime.StatefulKnowledgeSession;
+import org.drools.runtime.conf.ClockTypeOption;
+import org.drools.time.SessionPseudoClock;
+import org.drools.runtime.rule.WorkingMemoryEntryPoint;
 
+import uk.ac.ncl.util.CustomAgendaEventListener;
+import uk.ac.ncl.util.CustomWorkingMemoryEventListener;
 import uk.ac.ncl.xml.CCCResponse;
 
 /**
@@ -30,9 +46,11 @@ public class RelevanceEngine {
 	private final static Logger log = Logger.getLogger(RelevanceEngine.class.toString());
 
 	// /* Private data
-	static KnowledgeBase ruleBase = KnowledgeBaseFactory.newKnowledgeBase();
+	static KnowledgeBase ruleBase;// = KnowledgeBaseFactory.newKnowledgeBase();
 
-	static StatefulKnowledgeSession workingMem = ruleBase.newStatefulKnowledgeSession();// null;
+	static StatefulKnowledgeSession workingMem;// =
+												// ruleBase.newStatefulKnowledgeSession();//
+												// null;
 
 	static LinkedList<Event> eventQueue = new LinkedList<Event>();
 	static EventLogger eventLogger = null;
@@ -81,35 +99,74 @@ public class RelevanceEngine {
 		// Verify that the EventLogger is not null
 		if (el == null)
 			throw new IllegalArgumentException("EventLogger ref null");
-		Reader source = null;
-		try {
-			source = new FileReader(fileName);
-		} catch (Exception e) {
-			ErrorMessageManager.fatalErrorMsg("Exception opening file reader", e);
-		}
-		// Create PackageBuilder
+
+		// Create KnowledgeBuilder
 		KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-		builder.add(ResourceFactory.newFileResource(fileName), ResourceType.DRL);
+
+		try {
+			builder.add(ResourceFactory.newFileResource(fileName), ResourceType.CHANGE_SET);
+		} catch (Exception e) {
+			ErrorMessageManager.fatalErrorMsg("Exception opening file resource " + fileName, e);
+		}
+
 		// Check if the compilation was successful
 		if (builder.hasErrors()) {
 			handleCompilationErrors(builder, fileName);
 		}
-		// Generate rule package
-		Collection<KnowledgePackage> p = builder.getKnowledgePackages();
-		// Add Rule Package to current Rule Base
-		try {
-			ruleBase.addKnowledgePackages(p);
-		} catch (Exception e) {
-			ErrorMessageManager.fatalErrorMsg("Adding new Rule Package to current Rule Base failed", e);
-		}
+		KnowledgeBaseConfiguration config = KnowledgeBaseFactory.newKnowledgeBaseConfiguration();
+		config.setOption(MBeansOption.ENABLED);
+
+		ruleBase = KnowledgeBaseFactory.newKnowledgeBase("CCCbase", config);
+		ruleBase.addKnowledgePackages(builder.getKnowledgePackages());
+		KnowledgeAgentConfiguration aconf = KnowledgeAgentFactory.newKnowledgeAgentConfiguration();
+
+		aconf.setProperty("drools.agent.newInstance", "false");
+
+		KnowledgeAgent kagent = KnowledgeAgentFactory.newKnowledgeAgent("CCCagent", ruleBase, aconf);
+		kagent.applyChangeSet(ResourceFactory.newFileResource(fileName));
+		ruleBase = kagent.getKnowledgeBase();
+		ResourceChangeScannerConfiguration sconf = ResourceFactory.getResourceChangeScannerService()
+				.newResourceChangeScannerConfiguration();
+		sconf.setProperty("drools.resource.scanner.interval", "10");
+
+		ResourceFactory.getResourceChangeScannerService().configure(sconf);
+
+		KnowledgeSessionConfiguration sconfig = KnowledgeBaseFactory.newKnowledgeSessionConfiguration();
+		sconfig.setOption(ClockTypeOption.get("pseudo"));
+
+		workingMem = ruleBase.newStatefulKnowledgeSession(sconfig, null);
+		SessionPseudoClock clock = workingMem.getSessionClock();
+
+		workingMem.addEventListener(new CustomAgendaEventListener());
+		workingMem.addEventListener(new CustomWorkingMemoryEventListener());
 		// Initialize Stateful Session
 		// workingMem = ruleBase.newStatefulSession();
 		// Store event logger
+//
+//		}
+
+		KnowledgeRuntimeLogger rulesLogger = KnowledgeRuntimeLoggerFactory.newConsoleLogger(workingMem);
+
+		ResourceFactory.getResourceChangeNotifierService().start();
+		ResourceFactory.getResourceChangeScannerService().start();
+
 		eventLogger = el;
-		// TODO: Initialize things necessary to run contract
-		// such as ROP sets, and so on (probably by firing rules once
-		// or by setting a global with the setGlobal method
-		// of the the working memory)
+		final KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(workingMem,
+				"ruleLog", 1000);
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+
+			public void run() {
+
+				if (logger != null) {
+
+					logger.close();
+
+				}
+
+			}
+
+		});
 	}
 	/**
 	 * Initialize contract.
