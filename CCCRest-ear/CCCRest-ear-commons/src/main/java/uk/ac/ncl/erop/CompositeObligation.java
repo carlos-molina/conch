@@ -11,10 +11,7 @@ import java.util.Date;
  *
  * Instances of this class are composite obligations: obligations
  * for N business operations in disjunction with one deadline.
- * 
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep 2012) $$
+ *
  */
 public class CompositeObligation extends Obligation {
 	// An array of Business Operations in disjunction

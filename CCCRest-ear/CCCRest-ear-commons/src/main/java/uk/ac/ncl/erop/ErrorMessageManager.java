@@ -1,7 +1,6 @@
-/*
- * 
- */
 package uk.ac.ncl.erop;
+
+import java.util.logging.Logger;
 
 /**
  * The Class ErrorMessageManager.
@@ -9,13 +8,12 @@ package uk.ac.ncl.erop;
  * This class handles error messages, so repetitive blocks to print
  * the same kind of messages can be avoided.
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep 2012) $$
  */
 public class ErrorMessageManager {
+	private final static Logger log = Logger.getLogger(ErrorMessageManager.class.toString());
+
 	static void errorMsg(String message) {
-		System.out.println(message);
+		log.warning(message);
 	}
 	
 	/**
@@ -25,7 +23,7 @@ public class ErrorMessageManager {
 	 */
 	static void errorMsg(String[] messages) {
 		for (String string : messages) {
-			System.out.println(string);
+			log.warning(string);
 		}
 	}
 	
@@ -36,8 +34,8 @@ public class ErrorMessageManager {
 	 * @param e the e
 	 */
 	static void errorMsg(String message, Exception e) {
-		System.out.println("Exception: "+message);
-		System.out.println(e.getMessage());
+		log.warning("Exception: "+message);
+		log.warning(e.getMessage());
 		e.printStackTrace();
 	}
 	
@@ -48,8 +46,8 @@ public class ErrorMessageManager {
 	 * @param e the e
 	 */
 	static void fatalErrorMsg(String message, Exception e) {
-		System.out.println("Fatal exception: "+message);
-		System.out.println(e.getMessage());
+		log.severe("Fatal exception: "+message);
+		log.severe(e.getMessage());
 		e.printStackTrace();
 		System.exit(0);
 	}
@@ -60,7 +58,7 @@ public class ErrorMessageManager {
 	 * @param message the message
 	 */
 	static void fatalErrorMsg(String message) {
-		System.out.println("Fatal error: "+message);
+		log.severe("Fatal error: "+message);
 		System.exit(0);
 	}
 	
@@ -71,7 +69,7 @@ public class ErrorMessageManager {
 	 */
 	static void fatalErrorMsg(String[] messages) {
 		for (String string : messages) {
-			System.out.println(string);
+			log.severe(string);
 		}
 		System.exit(0);
 	}

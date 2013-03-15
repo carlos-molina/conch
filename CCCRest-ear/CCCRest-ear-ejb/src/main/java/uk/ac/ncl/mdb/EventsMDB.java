@@ -31,17 +31,24 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 
 import org.hornetq.jms.client.HornetQBytesMessage;
-import org.jboss.ejb3.annotation.ResourceAdapter;
 
-import uk.ac.ncl.erop.CCCExperiment;
+import uk.ac.ncl.erop.ContractComplianceChecker;
 import uk.ac.ncl.erop.Event;
 import uk.ac.ncl.model.BusinessEvent;
-import uk.ac.ncl.model.RuleFilesEnum;
+import uk.ac.ncl.conf.ConfigurationFilesEnum;
 import uk.ac.ncl.util.Resources;
 import uk.ac.ncl.xml.CCCResponse;
+import uk.ac.ncl.util.Resources;
 
+
+/**
+ * The Class EventsMDB.
+ *  Message Driven Bean for Business Events
+ */
 @MessageDriven(name = "EventsMDB", activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/events"),
@@ -51,10 +58,12 @@ public class EventsMDB implements MessageListener {
 	private final static Logger log = Logger.getLogger(EventsMDB.class.toString());
 	private String payloadXML;
 
+	private BusinessEvent bEvent;
+	
 	@PersistenceContext(unitName = "RopePU")
 	private EntityManager em;
 
-	private static CCCExperiment ccc;
+	private static ContractComplianceChecker ccc;
 	private List<Event> events = new ArrayList<Event>();
 
 	/**
@@ -74,10 +83,10 @@ public class EventsMDB implements MessageListener {
 				log.info("Received my resource: " + res);
 			} else if (rcvMessage instanceof BytesMessage) {
 
-				BusinessEvent bEvent = receiveBusinessEventMsg(rcvMessage);
+				bEvent = receiveBusinessEventMsg(rcvMessage);
 
-				ccc = CCCExperiment.createCCCExperiment(RuleFilesEnum.BUYER_STORE_CONTRACT.getRuleFilePath());
-
+				ccc = ContractComplianceChecker.createContractComplianceChecker(ConfigurationFilesEnum.CHANGESET_XML.getConfigurationFilePath());
+				
 				Event event;
 				List<CCCResponse> responses;
 				CCCResponse cccResponse = new CCCResponse();
@@ -90,23 +99,6 @@ public class EventsMDB implements MessageListener {
 
 				event = getEvent(bEvent);
 				log.info("event: " + event);
-//
-//				if (bEvent.getType() == "reset") {
-//
-//					events.add(getEvent(bEvent));
-//					responses = ccc.continueSimulation(events);
-//
-//					for (CCCResponse response: responses) {
-//						log.info("cccResponse: " + response);
-//
-//						sendResponse(response);
-//					}
-//
-//				} else {
-//					events.add(getEvent(bEvent));
-//
-//				}
-
 
 				cccResponse = processCCCEvent(event);
 
@@ -120,10 +112,8 @@ public class EventsMDB implements MessageListener {
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		} catch (JAXBException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -260,7 +250,6 @@ public class EventsMDB implements MessageListener {
 			bos.close();
 			bytes = bos.toByteArray();
 		} catch (IOException ex) {
-			// TODO: Handle the exception
 		}
 		return bytes;
 	}

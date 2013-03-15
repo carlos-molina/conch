@@ -18,11 +18,8 @@ public class CCCResponse implements Serializable{
 		this.setContractCompliant(isContractCompliant);
 	}
 
-	/**
-	 * 
-	 */
 	public CCCResponse() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@XmlElement

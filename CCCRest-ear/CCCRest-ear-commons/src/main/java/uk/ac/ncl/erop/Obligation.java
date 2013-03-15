@@ -1,19 +1,12 @@
-/*
- * 
- */
 package uk.ac.ncl.erop;
 
-// Instances of this class are obligations granted to role players.
 
 import java.util.Date;
 
 
 /**
  * The Class Obligation.
- *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep 2012) $$
+ *  Instances of this class are obligations granted to role players.
  */
 public class Obligation extends ROPEntity {
 	
