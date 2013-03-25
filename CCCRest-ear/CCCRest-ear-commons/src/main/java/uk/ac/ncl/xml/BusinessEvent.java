@@ -7,19 +7,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-/**
- * The Class Event.
- *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 10 $$, $$Date: 2012-09-25 17:00:29 +0100 (Tue, 25 Sep 2012) $$
- */
 @XmlRootElement(name = "event")
 public class BusinessEvent implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 	private String originator;
 	private String responder;

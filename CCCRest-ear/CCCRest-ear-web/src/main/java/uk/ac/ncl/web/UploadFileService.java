@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContextAttributeEvent;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,34 +19,28 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
-import uk.ac.ncl.model.RuleFilesEnum;
+import uk.ac.ncl.conf.ConfigurationFilesEnum;
 
 /**
  * The Class UploadFileService.
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-09-05 23:33:00 +0100 (Wed, 05 Sep 2012) $$
  */
 @Path("/file")
 public class UploadFileService {
 
 	/**
 	 * uploads a file to server instance.
-	 * @uml.property  name="uriInfo"
-	 * @uml.associationEnd  readOnly="true"
 	 */
 	@Context
 	UriInfo uriInfo;
-    private final String uploadDir = RuleFilesEnum.SIMPLE_CONTRACT.getRulesFolderPath();
+
+    private final String uploadDir = ConfigurationFilesEnum.SIMPLE_CONTRACT.getRulesFolderPath();
 
     /**
 	 * Upload file.

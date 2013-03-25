@@ -8,10 +8,6 @@ import java.util.*;
 /**
  * The Class Deadline.
  *
- * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
- * @author last edited by: $$Author: gsfyrakis $$
- * @version $$Revision: 5 $$, $$Date: 2012-06-13 20:00:59 +0100 (Wed, 13 Jun
- *          2012) $$
  */
 public class Deadline extends TimerTask {
 
