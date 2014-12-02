@@ -36,6 +36,8 @@ public class BusinessEvent implements Serializable {
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
+    @Column(name="sequenceId")
+	private String sequenceId;
 
 	@Column(name = "originator")//, columnDefinition = "VARCHAR(40)")
 	private String originator;
@@ -63,8 +65,9 @@ public class BusinessEvent implements Serializable {
 	 * @param type
 	 * @param status
 	 */
-	public BusinessEvent(String originator, String responder, String type, String status) {
+	public BusinessEvent(String sequenceId,String originator, String responder, String type, String status) {
 		super();
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
@@ -74,6 +77,21 @@ public class BusinessEvent implements Serializable {
 	public Long getId() {
 		return id;
 	}
+
+	/**
+	 *
+	 * @return sequenceId
+	 */
+	@XmlElement(name="sequenceId")
+	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+	public String getSequenceId() {
+		return sequenceId;
+	}
+
+	public void setSequenceId(String sequenceId) {
+		this.sequenceId = sequenceId;
+	}
+
 
 	/**
 	 * @return the originator
