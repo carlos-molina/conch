@@ -88,7 +88,7 @@ public class ContractComplianceChecker {
 		// Have the Relevance Engine do all the initialization bits
 		relevanceEngine.initializeContract(timeKeeper);
 		// Init event created and submitted
-		Event event = new Event("none", "none", "init", "success");
+		Event event = new Event("none","none", "none", "init", "success");
 		logger.logEvent(event);
 		relevanceEngine.addEvent(event);
 		startFlag = true;
@@ -104,7 +104,7 @@ public class ContractComplianceChecker {
 		// Have the Relevance Engine do all the initialization bits
 		relevanceEngine.initializeContract(timeKeeper);
 		// Init event created and submitted
-		Event event = new Event("none", "none", "init", "success");
+		Event event = new Event("none","none", "none", "init", "success");
 		//logger.logEvent(event);
 		relevanceEngine.addEvent(event);
 		startFlag = true;

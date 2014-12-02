@@ -6,13 +6,23 @@ package uk.ac.ncl.erop;
  */
 
 public class Responder {
+	private String sequenceId;
 	private Boolean isContractCompliant = false;
 
 	public Responder() {
 
 	}
 
-	public Responder(boolean contractCompliant) {
+	public String getSequenceId() {
+		return sequenceId;
+	}
+
+	public void setSequenceId(String sequenceId) {
+		this.sequenceId = sequenceId;
+	}
+
+	public Responder(String sequenceId, boolean contractCompliant) {
+		this.sequenceId = sequenceId;
 		this.isContractCompliant = contractCompliant;
 
 	}

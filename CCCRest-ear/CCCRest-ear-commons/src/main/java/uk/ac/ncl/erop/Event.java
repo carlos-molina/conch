@@ -11,7 +11,7 @@ import java.text.DateFormat;
 public class Event {
 
 	// / Private data
-
+	private String sequenceId = null;
 	// The role player that originated the event
 	private String originator = null;
 	// The role player that responded to the event
@@ -40,7 +40,7 @@ public class Event {
 	 * @throws IllegalArgumentException
 	 *             the illegal argument exception
 	 */
-	public Event(String originator, String responder, String type, String status) throws IllegalArgumentException {
+	public Event(String sequenceId, String originator, String responder, String type, String status) throws IllegalArgumentException {
 		// Check for the validity of the parameters
 		if ((originator == null) || (originator.length() == 0))
 			throw new IllegalArgumentException("Originator is null or empty");
@@ -51,6 +51,7 @@ public class Event {
 		if ((status == null) || (status.length() == 0))
 			throw new IllegalArgumentException("Status is null or empty");
 		// Arguments are acceptable, use them.
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
@@ -75,7 +76,7 @@ public class Event {
 	 * @param d
 	 *            the date timestamp
 	 */
-	public Event(String originator, String responder, String type, String status, Date d) {
+	public Event(String sequenceId, String originator, String responder, String type, String status, Date d) {
 		// Check for the validity of the parameters
 		if ((originator == null) || (originator.length() == 0))
 			throw new IllegalArgumentException("Originator is null or empty");
@@ -88,6 +89,7 @@ public class Event {
 		if (d == null)
 			throw new IllegalArgumentException("Timestamp is null");
 		// Arguments are acceptable, use them.
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
@@ -127,7 +129,7 @@ public class Event {
 	 * @param d
 	 *            the date in string format
 	 */
-	public Event(String originator, String responder, String type, String status, String d) {
+	public Event(String sequenceId, String originator, String responder, String type, String status, String d) {
 		// Check for the validity of the parameters
 		if ((originator == null) || (originator.length() == 0))
 			throw new IllegalArgumentException("Originator is null or empty");
@@ -140,6 +142,7 @@ public class Event {
 		if (d == null)
 			throw new IllegalArgumentException("Timestamp is null");
 		// Arguments are acceptable, use them.
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
@@ -368,6 +371,8 @@ public class Event {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Event [");
+		if(sequenceId !=null)
+			builder.append("sequenceId=").append(sequenceId).append(",");
 		if (originator != null)
 			builder.append("originator=").append(originator).append(", ");
 		if (responder != null)
@@ -382,4 +387,11 @@ public class Event {
 		return builder.toString();
 	}
 
+	public String getSequenceId() {
+		return sequenceId;
+	}
+
+	public void setSequenceId(String sequenceId) {
+		this.sequenceId = sequenceId;
+	}
 }

@@ -206,7 +206,7 @@ public class EventsMDB implements MessageListener {
 		if (bEvent.getType().equals("reset")) {
 			event = new Event(bEvent.getType());
 		} else {
-			event = new Event(bEvent.getOriginator(), bEvent.getResponder(), bEvent.getType(),
+			event = new Event(bEvent.getSequenceId(),bEvent.getOriginator(), bEvent.getResponder(), bEvent.getType(),
 					bEvent.getStatus());
 		}
 		return event;
