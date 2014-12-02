@@ -326,19 +326,23 @@ public class RelevanceEngine {
             workingMem.fireAllRules();
 
             // update response of CCC
+            updateResponseOfCCC(ev);
 
-            if (responder != null) {
-                if (responder.getContractCompliant() == null) {
-                    setCCCResponse(new CCCResponse(ev.getSequenceId(),false));
-                } else {
-                    setCCCResponse(new CCCResponse(ev.getSequenceId(), responder.getContractCompliant()));
-                }
-            }
         } catch (Exception e) {
             ErrorMessageManager.errorMsg("Exception when firing rules", e);
             setCCCResponse(new CCCResponse(ev.getSequenceId(),false));
         }
 
+    }
+
+    private static void updateResponseOfCCC(Event ev) {
+        if (responder != null) {
+            if (responder.getContractCompliant() == null) {
+                setCCCResponse(new CCCResponse(ev.getSequenceId(),false));
+            } else {
+                setCCCResponse(new CCCResponse(ev.getSequenceId(), responder.getContractCompliant()));
+            }
+        }
     }
 
     /**

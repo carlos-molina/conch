@@ -115,7 +115,7 @@ public class TimeKeeper {
 		} else {
 			name = name.concat(" Timeout");
 		}
-		Event ev = new Event(originator, responder, name, "timeout", new Date());
+		Event ev = new Event("sequenceId",originator, responder, name, "timeout", new Date());
 		// Pump the event in the queue and log it
 		logger.logEvent(ev);
 		relevanceEngine.addEvent(ev);

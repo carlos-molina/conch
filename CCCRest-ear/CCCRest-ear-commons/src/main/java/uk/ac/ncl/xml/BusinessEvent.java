@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BusinessEvent implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private String sequenceId;
 	private String originator;
 	private String responder;
 	private String type;
@@ -30,8 +31,9 @@ public class BusinessEvent implements Serializable {
 	 * @param status
 	 * @param id
 	 */
-	public BusinessEvent(String originator, String responder, String type, String status, String id) {
+	public BusinessEvent(String sequenceId, String originator, String responder, String type, String status, String id) {
 		super();
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
@@ -51,6 +53,21 @@ public class BusinessEvent implements Serializable {
 
 	}
 
+
+	/**
+	 *
+	 * Gets the sequenceId generated form epromela contract
+	 *
+	 * @return
+	 */
+	@XmlElement
+	public String getSequenceId() {
+		return sequenceId;
+	}
+
+	public void setSequenceId(String sequenceId) {
+		this.sequenceId = sequenceId;
+	}
 
 	/**
 	 * Gets the originator.
@@ -168,7 +185,6 @@ public class BusinessEvent implements Serializable {
 				+ (type != null ? "type=" + type + ", " : "") + (status != null ? "status=" + status + ", " : "")
 				+ (id != null ? "id=" + id : "") + "]";
 	}
-
 
 
 }

@@ -178,7 +178,7 @@ public class EventLogger {
 		em = Resources.getEntityManager();
 
 
-		BusinessEvent bEvent = new BusinessEvent(ev.getOriginator(),ev.getResponder(),ev.getType(),ev.getStatus());
+		BusinessEvent bEvent = new BusinessEvent(ev.getSequenceId(),ev.getOriginator(),ev.getResponder(),ev.getType(),ev.getStatus());
 
 		em.persist(bEvent);
 
