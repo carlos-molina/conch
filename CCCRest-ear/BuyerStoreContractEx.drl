@@ -54,6 +54,7 @@ rule "Buy Request Received"
 		ropSeller.addObligation("React To Buy Request", bos, buyer, 60,2);
 		System.out.println("* Buy Request Received rule triggered");
 		responder.setContractCompliant(true);
+		responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Buy Request Business 1st Failure"
@@ -67,6 +68,7 @@ rule "Buy Request Business 1st Failure"
 
 		System.out.println("* Buy Request Business Failure 1 rule triggered");
 		responder.setContractCompliant(true);
+		responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Buy Request Business 2nd Failure"
@@ -80,6 +82,7 @@ rule "Buy Request Business 2nd Failure"
 		ropSeller.reset();
 		System.out.println("* Buy Request Business Failure 2 rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 # Rule 2: having received a reject Buy Request event from the seller, the pending obligation
@@ -99,6 +102,7 @@ rule "Buy Request Rejected"
 		#ropBuyer.addRight(buyRequest, seller, (String)null);
 		System.out.println("* Buy Request Rejected rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Buy Request Rejected Business 1st Failure"
@@ -109,6 +113,7 @@ rule "Buy Request Rejected Business 1st Failure"
 		buyReject.setBusinessFailure(true);
 		System.out.println("* Buy Request Rejected Business 1st Failure rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 
@@ -122,6 +127,7 @@ rule "Buy Request Rejected Business 2nd Failure"
 		ropBuyer.reset();
 		ropSeller.reset();
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 # Rule 3: having received an accept Buy Request event from the seller, the pending obligation
@@ -139,6 +145,7 @@ rule "Buy Request Confirmation"
 		ropBuyer.addRight(cancelation, seller, 60, 2, 1);
 		System.out.println("* Buy Request Confirmation rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Buy Request Confirmation 1st Business Failure"
@@ -150,6 +157,7 @@ rule "Buy Request Confirmation 1st Business Failure"
 
 		System.out.println("* Buy Request confirmation 1st Business Failure rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Buy Request Confirmation 2nd Business Failure"
@@ -162,6 +170,7 @@ rule "Buy Request Confirmation 2nd Business Failure"
 		ropBuyer.reset();
 		ropSeller.reset();
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 # Rule 5: buyer pays. Obligation satisfied, The buyer regains the right to submit Buy Requests.
@@ -175,6 +184,7 @@ rule "Payment Received"
 		ropBuyer.removeRight(cancelation, seller);
 		System.out.println("* Payment rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Payment 1st Business Failure"
@@ -185,6 +195,7 @@ rule "Payment 1st Business Failure"
 		payment.setBusinessFailure(true);
 		System.out.println("* Payment 1st Business Failure *");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Payment 2nd Business Failure"
@@ -198,6 +209,7 @@ rule "Payment 2nd Business Failure"
 		ropSeller.reset();
 
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 rule "Buy cancelation"
 	when
@@ -211,6 +223,7 @@ rule "Buy cancelation"
 		System.out.println("matches right cancelation: " + ropBuyer.toString());
 		System.out.println("* Buy cancelation rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Cancelation 1st Business Failure"
@@ -222,6 +235,7 @@ rule "Cancelation 1st Business Failure"
 		cancelation.setBusinessFailure(true);
 		System.out.println("* Buy cancelation 1st Business Failure rule triggered");
 		responder.setContractCompliant(true);
+        responder.setSequenceId($e.getSequenceId());
 end
 
 rule "Cancelation 2nd Business Failure"
@@ -236,6 +250,7 @@ rule "Cancelation 2nd Business Failure"
 		ropSeller.reset();
 
 		responder.setContractCompliant(true);
+		responder.setSequenceId($e.getSequenceId());
 end
 
 
@@ -263,6 +278,7 @@ rule "Reset"
 
 		System.out.println("* Reset rule triggered");
 		responder.setContractCompliant(true);
+		responder.setSequenceId($e.getSequenceId());
 end
 
 
