@@ -38,6 +38,7 @@ import org.hornetq.jms.client.HornetQBytesMessage;
 
 import uk.ac.ncl.erop.ContractComplianceChecker;
 import uk.ac.ncl.erop.Event;
+import uk.ac.ncl.logging.CCCLogger;
 import uk.ac.ncl.model.BusinessEvent;
 import uk.ac.ncl.conf.ConfigurationFilesEnum;
 import uk.ac.ncl.util.Resources;
@@ -99,11 +100,13 @@ public class EventsMDB implements MessageListener {
 
 				event = getEvent(bEvent);
 				log.info("event: " + event);
-
+				CCCLogger.logTrace("---------------------- START ---------------------");
+                CCCLogger.logTrace("Business event: " + event );
 				cccResponse = processCCCEvent(event);
 
 				log.info("cccResponse: " + cccResponse);
-
+                CCCLogger.logTrace("cccResponse: " + cccResponse);
+				CCCLogger.logTrace("---------------------- END -----------------------");
 				sendResponse(cccResponse);
 
 			} else {
