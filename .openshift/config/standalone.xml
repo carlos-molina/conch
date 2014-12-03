@@ -83,7 +83,99 @@
 					<handler name="CONSOLE"/>
 				</handlers>
 			</root-logger>
-		</subsystem>
+			 <!-- EXAMPLE ASYNCHRONOUS LOGGER CONFIGURATION FOR QUICKSTART, NOTE IT LOGS TO FILES AS DEFINED BELOW -->
+    <!-- Configure the logging async handlers -->
+    <async-handler name="TRACE_CCC_ASYNC">
+        <level name="TRACE"/>
+        <queue-length value="1024"/>
+        <overflow-action value="block"/>
+        <subhandlers>
+            <handler name="FILE_CCC_TRACE"/>
+        </subhandlers>
+    </async-handler>
+    <async-handler name="DEBUG_CCC_ASYNC">
+        <level name="DEBUG"/>
+        <queue-length value="1024"/>
+        <overflow-action value="block"/>
+        <subhandlers>
+            <handler name="FILE_CCC_DEBUG"/>
+        </subhandlers>
+    </async-handler>
+    <async-handler name="INFO_CCC_ASYNC">
+        <level name="INFO"/>
+        <queue-length value="1024"/>
+        <overflow-action value="block"/>
+        <subhandlers>
+            <handler name="FILE_CCC_INFO"/>
+        </subhandlers>
+    </async-handler>
+    <async-handler name="WARN_CCC_ASYNC">
+        <level name="WARN"/>
+        <queue-length value="1024"/>
+        <overflow-action value="block"/>
+        <subhandlers>
+            <handler name="FILE_CCC_WARN"/>
+        </subhandlers>
+    </async-handler>
+    <async-handler name="ERROR_CCC_ASYNC">
+        <level name="ERROR"/>
+        <queue-length value="1024"/>
+        <overflow-action value="block"/>
+        <subhandlers>
+            <handler name="FILE_CCC_ERROR"/>
+        </subhandlers>
+    </async-handler>
+    <async-handler name="FATAL_CCC_ASYNC">
+        <level name="FATAL"/>
+        <queue-length value="1024"/>
+        <overflow-action value="block"/>
+        <subhandlers>
+            <handler name="FILE_CCC_FATAL"/>
+        </subhandlers>
+    </async-handler>
+    
+    <!-- Add the periodic rotating file handlers corresponding to those added to the logging properties file -->
+    <periodic-rotating-file-handler name="FILE_CCC_TRACE">
+        <file relative-to="jboss.server.log.dir" path="ccc.trace.log"/>
+        <suffix value=".yyyy.MM.dd"/>
+    </periodic-rotating-file-handler>
+    <periodic-rotating-file-handler name="FILE_CCC_DEBUG">
+        <file relative-to="jboss.server.log.dir" path="ccc.debug.log"/>
+        <suffix value=".yyyy.MM.dd"/>
+    </periodic-rotating-file-handler>
+    <periodic-rotating-file-handler name="FILE_CCC_INFO">
+        <file relative-to="jboss.server.log.dir" path="ccc.info.log"/>
+        <suffix value=".yyyy.MM.dd"/>
+    </periodic-rotating-file-handler>
+    <periodic-rotating-file-handler name="FILE_CCC_WARN">
+        <file relative-to="jboss.server.log.dir" path="ccc.warn.log"/>
+        <suffix value=".yyyy.MM.dd"/>
+    </periodic-rotating-file-handler>
+    <periodic-rotating-file-handler name="FILE_CCC_ERROR">
+        <file relative-to="jboss.server.log.dir" path="ccc.error.log"/>
+        <suffix value=".yyyy.MM.dd"/>
+    </periodic-rotating-file-handler>
+    <periodic-rotating-file-handler name="FILE_CCC_FATAL">
+        <file relative-to="jboss.server.log.dir" path="ccc.fatal.log"/>
+        <suffix value=".yyyy.MM.dd"/>
+    </periodic-rotating-file-handler>
+
+    <!-- INITIALLY SET THE LOG LEVEL TO TRACE FOR THE EXAMPLE CALLS-->
+    <logger category="org.jboss.as.quickstarts.logging">
+        <!-- To view different logging levels, change the level below 
+        from TRACE to DEBUG, INFO, WARN, ERROR, or FATAL, 
+        then access the application.-->
+        <level name="TRACE"/>
+        <handlers>
+            <handler name="TRACE_CCC_ASYNC"/>
+            <handler name="DEBUG_CCC_ASYNC"/>
+            <handler name="INFO_CCC_ASYNC"/>
+            <handler name="WARN_CCC_ASYNC"/>
+            <handler name="ERROR_CCC_ASYNC"/>
+            <handler name="FATAL_CCC_ASYNC"/>
+        </handlers>
+    </logger>
+</subsystem>
 		<subsystem xmlns="urn:jboss:domain:cmp:1.0" />
 		<subsystem xmlns="urn:jboss:domain:configadmin:1.0" />
 		<subsystem xmlns="urn:jboss:domain:datasources:1.1">
