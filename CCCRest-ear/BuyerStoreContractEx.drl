@@ -230,6 +230,7 @@ rule "Payment 2nd Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
+
 rule "Buy cancelation"
 	when
 		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="success")
@@ -275,7 +276,6 @@ rule "Cancelation 2nd Business Failure"
 		responder.setContractCompliant(true);
 		responder.setSequenceId($e.getSequenceId());
 end
-
 
 // Rule: Reset state of CCC after last message of sequence
 rule "Reset"

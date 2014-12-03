@@ -3,20 +3,13 @@ package uk.ac.ncl.util;
 
 import java.util.logging.Logger;
 
-<<<<<<< HEAD:CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
-import org.drools.event.rule.ObjectInsertedEvent;
-import org.drools.event.rule.ObjectRetractedEvent;
-import org.drools.event.rule.ObjectUpdatedEvent;
-import org.drools.event.rule.WorkingMemoryEventListener;
-=======
 import org.kie.api.event.rule.ObjectDeletedEvent;
 import org.kie.api.event.rule.ObjectInsertedEvent;
 import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import uk.ac.ncl.logging.CCCLogger;
->>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
 
-public class CustomWorkingMemoryEventListener implements WorkingMemoryEventListener {
+public class CustomWorkingMemoryEventListener implements RuleRuntimeEventListener {
 	
 	private final static Logger logger = Logger.getLogger(CustomWorkingMemoryEventListener.class.toString());
 
@@ -29,13 +22,8 @@ public class CustomWorkingMemoryEventListener implements WorkingMemoryEventListe
 	 */
 	@Override
 	public void objectInserted(ObjectInsertedEvent event) {
-<<<<<<< HEAD:CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
-		logger.info("Object Inserted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKnowledgeRuntime());
-
-=======
 		logger.info("Object Inserted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
-		CCCLogger.logTrace("Object Inserted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
->>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
+//		CCCLogger.logTrace("Object Inserted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
 	}
 
 	/*
@@ -46,14 +34,9 @@ public class CustomWorkingMemoryEventListener implements WorkingMemoryEventListe
 	 * drools.event.rule.ObjectRetractedEvent)
 	 */
 	@Override
-<<<<<<< HEAD:CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
-	public void objectRetracted(ObjectRetractedEvent event) {
-		logger.info("Object Retracted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKnowledgeRuntime());
-=======
 	public void objectDeleted(ObjectDeletedEvent event) {
 		logger.info("Object Retracted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
-		CCCLogger.logTrace("Object Retracted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
->>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
+//		CCCLogger.logTrace("Object Retracted: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
 
 	}
 
@@ -66,12 +49,8 @@ public class CustomWorkingMemoryEventListener implements WorkingMemoryEventListe
 	 */
 	@Override
 	public void objectUpdated(ObjectUpdatedEvent event) {
-<<<<<<< HEAD:CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
-		logger.info("Object Updated: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKnowledgeRuntime());
-=======
 		logger.info("Object Updated: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
-		CCCLogger.logTrace("Object Updated: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
->>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/java/uk/ac/ncl/util/CustomWorkingMemoryEventListener.java
+//		CCCLogger.logTrace("Object Updated: " + event.getFactHandle() + " Knowledge Runtime: " + event.getKieRuntime());
 
 	}
 }
