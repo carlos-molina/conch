@@ -21,7 +21,7 @@ batch
 
 # Create the logger for our quickstart class
 ### NOTE: To view different logging levels, change the level below from TRACE to DEBUG, INFO, WARN, ERROR, or FATAL, then access the application.
-/subsystem=logging/logger=uk.ac.ncl.erop.logging:add(level=TRACE,handlers=[TRACE_CCC_ASYNC,DEBUG_CCC_ASYNC,INFO_CCC_ASYNC,WARN_CCC_ASYNC,ERROR_CCC_ASYNC,FATAL_CCC_ASYNC])
+/subsystem=logging/logger=uk.ac.ncl.logging:add(level=TRACE,handlers=[TRACE_CCC_ASYNC,DEBUG_CCC_ASYNC,INFO_CCC_ASYNC,WARN_CCC_ASYNC,ERROR_CCC_ASYNC,FATAL_CCC_ASYNC])
 
 
 # Run the batch commands
