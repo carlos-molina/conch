@@ -28,8 +28,19 @@ import org.drools.runtime.conf.ClockTypeOption;
 import org.drools.time.SessionPseudoClock;
 import org.drools.runtime.rule.WorkingMemoryEntryPoint;
 
+<<<<<<< HEAD:CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/RelevanceEngine.java
 import uk.ac.ncl.util.CustomAgendaEventListener;
 import uk.ac.ncl.util.CustomWorkingMemoryEventListener;
+=======
+import org.drools.compiler.compiler.DroolsParserException;
+
+
+import org.kie.api.KieServices;
+import org.kie.api.builder.*;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
+import uk.ac.ncl.logging.CCCLogger;
+>>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/RelevanceEngine.java
 import uk.ac.ncl.xml.CCCResponse;
 
 /**
@@ -56,6 +67,7 @@ public class RelevanceEngine {
 
     // default response is non contract compliant otherwise contract compliant
     private static CCCResponse cccResponse = new CCCResponse("",false);
+    private static CCCLogger ccclog = new CCCLogger();
 
     /**
      * Handle compilation errors.
@@ -262,6 +274,9 @@ public class RelevanceEngine {
 
         responder = new Responder("",false);
         workingMem.setGlobal("responder", responder);
+//        ccclog = new CCCLogger();
+
+        workingMem.setGlobal("cccloger",ccclog);
 
         log.info("Initialization complete");
     }

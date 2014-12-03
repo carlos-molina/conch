@@ -2,8 +2,13 @@ package BuyerStoreContractEx
 
 # Import Java classes for EROP support
 import uk.ac.ncl.erop.*;
+<<<<<<< HEAD:CCCRest-ear/BuyerStoreContractEx.drl
 
 # Global variables (persistent objects passed from outside)
+=======
+import  uk.ac.ncl.logging.CCCLogger;
+// Global variables (persistent objects passed from outside)
+>>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/resources/uk.ac.ncl.ccc.rules/BuyerStoreContractEx.drl
 global RelevanceEngine engine;
 global EventLogger logger;
 
@@ -21,6 +26,7 @@ global BusinessOperation cancelation;
 
 global Responder responder;
 
+global CCCLogger cccloger;
 
 # Rule 0: initialize the ROP sets for buyer and seller.
 # This rule is launched only when the contract is set up.
@@ -32,10 +38,19 @@ rule "Initialization"
 		$e: Event (type == "init")
 	then
 		System.out.println("* Initialization when");
+<<<<<<< HEAD:CCCRest-ear/BuyerStoreContractEx.drl
 		# Add buyer's right to submit an order
 		ropBuyer.addRight(buyRequest, seller, (String)null);
 		System.out.println("* Initialization rule triggered ");
 		#responder.setContractCompliant(false);
+=======
+		cccloger.logTrace("* Initialization when");
+//		 Add buyer's right to submit an order
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+		System.out.println("* Initialization rule triggered ");
+		cccloger.logTrace("* Initialization rule triggered");
+//		responder.setContractCompliant(false);
+>>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/resources/uk.ac.ncl.ccc.rules/BuyerStoreContractEx.drl
 end
 
 # Rule 1: having received a Buy Request event from the buyer, his right to submit another
@@ -53,6 +68,8 @@ rule "Buy Request Received"
 		BusinessOperation[] bos = {buyConfirm, buyReject};
 		ropSeller.addObligation("React To Buy Request", bos, buyer, 60,2);
 		System.out.println("* Buy Request Received rule triggered");
+		cccloger.logTrace("* Buy Request Received rule triggered");
+
 		responder.setContractCompliant(true);
 		responder.setSequenceId($e.getSequenceId());
 end
@@ -67,6 +84,7 @@ rule "Buy Request Business 1st Failure"
 		buyRequest.setBusinessFailure(true);
 
 		System.out.println("* Buy Request Business Failure 1 rule triggered");
+		cccloger.logTrace("* Buy Request Business Failure 1 rule triggered");
 		responder.setContractCompliant(true);
 		responder.setSequenceId($e.getSequenceId());
 end
@@ -81,6 +99,7 @@ rule "Buy Request Business 2nd Failure"
 		ropBuyer.reset();
 		ropSeller.reset();
 		System.out.println("* Buy Request Business Failure 2 rule triggered");
+        cccloger.logTrace("* Buy Request Business Failure 2 rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -94,13 +113,24 @@ rule "Buy Request Rejected"
 		eval(ropSeller.matchesObligations("React To Buy Request"));
 	then
 		System.out.println("* Buy Rejection");
+<<<<<<< HEAD:CCCRest-ear/BuyerStoreContractEx.drl
 
 		# Buyer's Obligation is satisfied, remove it
 		ropSeller.removeObligation("React To Buy Request", buyer);
 		System.out.println("* Buy Rejection");
 		# Restore buyer's right to submit other Buy Requests
 		#ropBuyer.addRight(buyRequest, seller, (String)null);
+=======
+		cccloger.logTrace("* Buy Rejection");
+		// Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Buy Request", buyer);
+		System.out.println("* Buy Rejection");
+
+		// Restore buyer's right to submit other Buy Requests
+		//ropBuyer.addRight(buyRequest, seller, (String)null);
+>>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/resources/uk.ac.ncl.ccc.rules/BuyerStoreContractEx.drl
 		System.out.println("* Buy Request Rejected rule triggered");
+        cccloger.logTrace("* Buy Request Rejected rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -112,6 +142,7 @@ rule "Buy Request Rejected Business 1st Failure"
 	then
 		buyReject.setBusinessFailure(true);
 		System.out.println("* Buy Request Rejected Business 1st Failure rule triggered");
+        cccloger.logTrace("* Buy Request Rejected Business 1st Failure rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -124,6 +155,7 @@ rule "Buy Request Rejected Business 2nd Failure"
 	then
 
 		System.out.println("* Buy Request Rejected Business 2nd Failure rule triggered");
+        cccloger.logTrace("* Buy Request Rejected Business 2nd Failure rule triggered");
 		ropBuyer.reset();
 		ropSeller.reset();
 		responder.setContractCompliant(true);
@@ -144,6 +176,7 @@ rule "Buy Request Confirmation"
 		ropBuyer.addObligation(payment, seller, 60, 2, 1);
 		ropBuyer.addRight(cancelation, seller, 60, 2, 1);
 		System.out.println("* Buy Request Confirmation rule triggered");
+        cccloger.logTrace("* Buy Request Confirmation rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -156,6 +189,7 @@ rule "Buy Request Confirmation 1st Business Failure"
 		buyConfirm.setBusinessFailure(true);
 
 		System.out.println("* Buy Request confirmation 1st Business Failure rule triggered");
+        cccloger.logTrace("* Buy Request confirmation 1st Business Failure rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -167,6 +201,7 @@ rule "Buy Request Confirmation 2nd Business Failure"
 	then
 
 		System.out.println("* Buy Request confirmation 2nd Business Failure rule triggered");
+        cccloger.logTrace("* Buy Request confirmation 2nd Business Failure rule triggered");
 		ropBuyer.reset();
 		ropSeller.reset();
 		responder.setContractCompliant(true);
@@ -183,6 +218,7 @@ rule "Payment Received"
 		ropBuyer.removeObligation(payment, seller);
 		ropBuyer.removeRight(cancelation, seller);
 		System.out.println("* Payment rule triggered");
+        cccloger.logTrace("* Payment rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -194,6 +230,7 @@ rule "Payment 1st Business Failure"
 	then
 		payment.setBusinessFailure(true);
 		System.out.println("* Payment 1st Business Failure *");
+        cccloger.logTrace("* Payment 1st Business Failure *");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -205,6 +242,7 @@ rule "Payment 2nd Business Failure"
 	then
 
 		System.out.println("* Payment 2nd Business Failure");
+        cccloger.logTrace("* Payment 2nd Business Failure");
 		ropBuyer.reset();
 		ropSeller.reset();
 
@@ -221,7 +259,9 @@ rule "Buy cancelation"
 		ropBuyer.removeObligation(payment, seller);
 
 		System.out.println("matches right cancelation: " + ropBuyer.toString());
+        cccloger.logTrace("matches right cancelation: " + ropBuyer.toString());
 		System.out.println("* Buy cancelation rule triggered");
+        cccloger.logTrace("* Buy cancelation rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -234,6 +274,7 @@ rule "Cancelation 1st Business Failure"
 		# Buyer's Obligation is satiasfied, remove it.
 		cancelation.setBusinessFailure(true);
 		System.out.println("* Buy cancelation 1st Business Failure rule triggered");
+        cccloger.logTrace("* Buy cancelation 1st Business Failure rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
@@ -246,6 +287,7 @@ rule "Cancelation 2nd Business Failure"
 		# Buyer's Obligation is satiasfied, remove it.
 
 		System.out.println("* Buy cancelation 2nd Business Failure rule triggered");
+        cccloger.logTrace("* Buy cancelation 2nd Business Failure rule triggered");
 		ropBuyer.reset();
 		ropSeller.reset();
 
@@ -262,6 +304,8 @@ rule "Reset"
 		eval(!ropBuyer.matchesRights(cancelation))
 	then
 		System.out.println("* reset when");
+        cccloger.logTrace("* reset when");
+
 
 		ropBuyer.reset();
 		ropSeller.reset();
@@ -277,6 +321,8 @@ rule "Reset"
 		ropBuyer.addRight(buyRequest, seller, (String)null);
 
 		System.out.println("* Reset rule triggered");
+        cccloger.logTrace("* Reset rule triggered");
+
 		responder.setContractCompliant(true);
 		responder.setSequenceId($e.getSequenceId());
 end

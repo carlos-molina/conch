@@ -1,0 +1,28 @@
+# Batch script to add and configure logging in the JBoss server
+
+# Start batching commands
+batch
+
+# Add the periodic rotating file handlers corresponding to those added to the logging properties file
+/subsystem=logging/periodic-rotating-file-handler=FILE_CCC_TRACE:add(suffix=".yyyy.MM.dd", file={"path"=>"ccc.trace.log", "relative-to"=>"jboss.server.log.dir"})
+/subsystem=logging/periodic-rotating-file-handler=FILE_CCC_DEBUG:add(suffix=".yyyy.MM.dd", file={"path"=>"ccc.debug.log", "relative-to"=>"jboss.server.log.dir"})
+/subsystem=logging/periodic-rotating-file-handler=FILE_CCC_INFO:add(suffix=".yyyy.MM.dd", file={"path"=>"ccc.info.log", "relative-to"=>"jboss.server.log.dir"})
+/subsystem=logging/periodic-rotating-file-handler=FILE_CCC_WARN:add(suffix=".yyyy.MM.dd", file={"path"=>"ccc.warn.log", "relative-to"=>"jboss.server.log.dir"})
+/subsystem=logging/periodic-rotating-file-handler=FILE_CCC_ERROR:add(suffix=".yyyy.MM.dd", file={"path"=>"ccc.error.log", "relative-to"=>"jboss.server.log.dir"})
+/subsystem=logging/periodic-rotating-file-handler=FILE_CCC_FATAL:add(suffix=".yyyy.MM.dd", file={"path"=>"ccc.fatal.log", "relative-to"=>"jboss.server.log.dir"})
+
+# Configure the logging async handlers
+/subsystem=logging/async-handler=TRACE_CCC_ASYNC:add(level=TRACE,queue-length=1024,overflow-action=BLOCK,subhandlers=["FILE_CCC_TRACE"]) 
+/subsystem=logging/async-handler=DEBUG_CCC_ASYNC:add(level=DEBUG,queue-length=1024,overflow-action=BLOCK,subhandlers=["FILE_CCC_DEBUG"]) 
+/subsystem=logging/async-handler=INFO_CCC_ASYNC:add(level=INFO,queue-length=1024,overflow-action=BLOCK,subhandlers=["FILE_CCC_INFO"]) 
+/subsystem=logging/async-handler=WARN_CCC_ASYNC:add(level=WARN,queue-length=1024,overflow-action=BLOCK,subhandlers=["FILE_CCC_WARN"]) 
+/subsystem=logging/async-handler=ERROR_CCC_ASYNC:add(level=ERROR,queue-length=1024,overflow-action=BLOCK,subhandlers=["FILE_CCC_ERROR"]) 
+/subsystem=logging/async-handler=FATAL_CCC_ASYNC:add(level=FATAL,queue-length=1024,overflow-action=BLOCK,subhandlers=["FILE_CCC_FATAL"]) 
+
+# Create the logger for our quickstart class
+### NOTE: To view different logging levels, change the level below from TRACE to DEBUG, INFO, WARN, ERROR, or FATAL, then access the application.
+/subsystem=logging/logger=uk.ac.ncl.erop.logging:add(level=TRACE,handlers=[TRACE_CCC_ASYNC,DEBUG_CCC_ASYNC,INFO_CCC_ASYNC,WARN_CCC_ASYNC,ERROR_CCC_ASYNC,FATAL_CCC_ASYNC])
+
+
+# Run the batch commands
+run-batch
