@@ -67,7 +67,7 @@ public class RelevanceEngine {
 
     // default response is non contract compliant otherwise contract compliant
     private static CCCResponse cccResponse = new CCCResponse("",false);
-    private static CCCLogger ccclog = new CCCLogger();
+//    private static CCCLogger ccclog;
 
     /**
      * Handle compilation errors.
@@ -276,7 +276,7 @@ public class RelevanceEngine {
         workingMem.setGlobal("responder", responder);
 //        ccclog = new CCCLogger();
 
-        workingMem.setGlobal("cccloger",ccclog);
+        workingMem.setGlobal("cccloger", CCCLogger.class);
 
         log.info("Initialization complete");
     }
