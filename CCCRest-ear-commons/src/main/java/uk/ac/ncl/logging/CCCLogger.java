@@ -3,7 +3,7 @@ package uk.ac.ncl.logging;
 import org.jboss.logging.Logger;
 
 /**
- * Created by alpac on 02/12/2014.
+ * Created by Ioannis Sfyrakis on 02/12/2014.
  */
 public class CCCLogger {
 

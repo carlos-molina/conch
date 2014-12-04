@@ -364,28 +364,7 @@ public class Event {
 			return new String(status);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Event [");
-		if(sequenceId !=null)
-			builder.append("sequenceId=").append(sequenceId).append(",");
-		if (originator != null)
-			builder.append("originator=").append(originator).append(", ");
-		if (responder != null)
-			builder.append("responder=").append(responder).append(", ");
-		if (timestamp != null)
-			builder.append("timestamp=").append(timestamp).append(", ");
-		if (type != null)
-			builder.append("type=").append(type).append(", ");
-		if (status != null)
-			builder.append("status=").append(status);
-		builder.append("]");
-		return builder.toString();
-	}
+
 
 	public String getSequenceId() {
 		return sequenceId;
@@ -393,5 +372,17 @@ public class Event {
 
 	public void setSequenceId(String sequenceId) {
 		this.sequenceId = sequenceId;
+	}
+
+	@Override
+	public String toString() {
+		return "Event{" +
+				"sequenceId='" + sequenceId + '\'' +
+				", originator='" + originator + '\'' +
+				", responder='" + responder + '\'' +
+				", timestamp=" + timestamp +
+				", type='" + type + '\'' +
+				", status='" + status + '\'' +
+				'}';
 	}
 }

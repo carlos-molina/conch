@@ -176,29 +176,16 @@ public class BusinessEvent implements Serializable {
 		this.status = status;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("BusinessEvent [");
-		if (id != null)
-			builder.append("id=").append(id).append(", ");
-		if (originator != null)
-			builder.append("originator=").append(originator).append(", ");
-		if (responder != null)
-			builder.append("responder=").append(responder).append(", ");
-		if (timestamp != null)
-			builder.append("timestamp=").append(timestamp).append(", ");
-		if (type != null)
-			builder.append("type=").append(type).append(", ");
-		if (status != null)
-			builder.append("status=").append(status);
-		builder.append("]");
-		return builder.toString();
+		return "BusinessEvent{" +
+				"id=" + id +
+				", sequenceId='" + sequenceId + '\'' +
+				", originator='" + originator + '\'' +
+				", responder='" + responder + '\'' +
+				", timestamp=" + timestamp +
+				", type='" + type + '\'' +
+				", status='" + status + '\'' +
+				'}';
 	}
-
 }

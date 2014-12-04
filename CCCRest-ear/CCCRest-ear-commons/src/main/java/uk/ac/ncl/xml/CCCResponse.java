@@ -44,16 +44,12 @@ public class CCCResponse implements Serializable{
 		this.isContractCompliant = isContractCompliant;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CCCResponse [isContractCompliant=").append(isContractCompliant).append("]");
-		return builder.toString();
+		return "CCCResponse{" +
+				"isContractCompliant=" + isContractCompliant +
+				", sequenceId='" + sequenceId + '\'' +
+				'}';
 	}
-	
-	
-
 }

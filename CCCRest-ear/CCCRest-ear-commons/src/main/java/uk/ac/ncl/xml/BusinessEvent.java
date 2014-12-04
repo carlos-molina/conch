@@ -175,16 +175,16 @@ public class BusinessEvent implements Serializable {
 		this.id = id;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString() {
-		return "EventDTO [" + (originator != null ? "originator=" + originator + ", " : "")
-				+ (responder != null ? "responder=" + responder + ", " : "")
-				+ (type != null ? "type=" + type + ", " : "") + (status != null ? "status=" + status + ", " : "")
-				+ (id != null ? "id=" + id : "") + "]";
+		return "BusinessEvent{" +
+				"sequenceId='" + sequenceId + '\'' +
+				", originator='" + originator + '\'' +
+				", responder='" + responder + '\'' +
+				", type='" + type + '\'' +
+				", status='" + status + '\'' +
+				", id='" + id + '\'' +
+				'}';
 	}
-
-
 }
