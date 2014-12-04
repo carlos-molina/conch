@@ -59,7 +59,7 @@
 			<console-handler name="CONSOLE">
 				<level name="INFO"/>
 				<formatter>
-					<pattern-formatter pattern="%d{yyyy/MM/dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
+					<pattern-formatter pattern="%d{yyyy/MM/dd HH:mm:ss,SSS} %-5p [%c] %s%E%n"/>
 				</formatter>
 			</console-handler>
 			<logger category="com.arjuna">
@@ -166,9 +166,9 @@
         from TRACE to DEBUG, INFO, WARN, ERROR, or FATAL, 
         then access the application.-->
         <level name="TRACE"/>
-        <formatter>
+       <!--  <formatter>
 					<pattern-formatter pattern="%d{yyyy/MM/dd HH:mm:ss,SSS} %-5p [%c] %s%E%n"/>
-				</formatter>
+				</formatter> -->
         <handlers>
             <handler name="TRACE_CCC_ASYNC"/>
             <handler name="DEBUG_CCC_ASYNC"/>
