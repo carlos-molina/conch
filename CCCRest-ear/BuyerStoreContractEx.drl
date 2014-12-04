@@ -66,7 +66,7 @@ end
 rule "Buy Request Business 1st Failure"
 	when
 		// Verify type of event, originator, and responder
-		$e: Event(type=="BUYREQ", originator=="buyer", responder=="store", status=="bizfail")
+		$e: Event(type=="BUYREQ", originator=="buyer", responder=="store", status=="tecfail")
 		eval(ropBuyer.matchesRights(buyRequest) && buyRequest.getBusinessFailure()== false )
 
 	then
@@ -78,10 +78,10 @@ rule "Buy Request Business 1st Failure"
 		responder.setSequenceId($e.getSequenceId());
 end
 
-rule "Buy Request Business 2nd Failure"
+/*rule "Buy Request Business 2nd Failure"
 	when
 		// Verify type of event, originator, and responder
-		$e: Event(type=="BUYREQ", originator=="buyer", responder=="store", status=="bizfail")
+		$e: Event(type=="BUYREQ", originator=="buyer", responder=="store", status=="tecfail")
 		eval(ropBuyer.matchesRights(buyRequest) && buyRequest.getBusinessFailure()== true)
 
 	then
@@ -91,7 +91,7 @@ rule "Buy Request Business 2nd Failure"
         CCCLogger.logTrace("* Buy Request Business Failure 2 rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
-end
+end */
 
 /* Rule 2: having received a reject Buy Request event from the seller, the pending obligation
 * is satisfied. Restore buyer's right to submit Buy Requests.
@@ -118,7 +118,7 @@ end
 
 rule "Buy Request Rejected Business 1st Failure"
 	when
-		$e: Event(type=="BUYREJ", originator=="store", responder=="buyer", status=="bizfail")
+		$e: Event(type=="BUYREJ", originator=="store", responder=="buyer", status=="tecfail")
 		eval(ropSeller.matchesObligations("React To Buy Request") && buyReject.getBusinessFailure()==false)
 	then
 		buyReject.setBusinessFailure(true);
@@ -129,9 +129,9 @@ rule "Buy Request Rejected Business 1st Failure"
 end
 
 
-rule "Buy Request Rejected Business 2nd Failure"
+/*rule "Buy Request Rejected Business 2nd Failure"
 	when
-		$e: Event(type=="BUYREJ", originator=="store", responder=="buyer", status=="bizfail")
+		$e: Event(type=="BUYREJ", originator=="store", responder=="buyer", status=="tecfail")
 		eval(ropSeller.matchesObligations("React To Buy Request") && buyReject.getBusinessFailure()==true)
 	then
 
@@ -142,7 +142,7 @@ rule "Buy Request Rejected Business 2nd Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-
+   */
 /* Rule 3: having received an accept Buy Request event from the seller, the pending obligation
 * is satisfied. New obligation on buyer to pay seller. */
 rule "Buy Request Confirmation"
@@ -164,7 +164,7 @@ end
 
 rule "Buy Request Confirmation 1st Business Failure"
 	when
-		$e: Event(type=="BUYCONF", originator=="store", responder=="buyer", status=="bizfail")
+		$e: Event(type=="BUYCONF", originator=="store", responder=="buyer", status=="tecfail")
 		eval(ropSeller.matchesObligations("React To Buy Request") && buyConfirm.getBusinessFailure()==false)
 	then
 		buyConfirm.setBusinessFailure(true);
@@ -175,9 +175,9 @@ rule "Buy Request Confirmation 1st Business Failure"
         responder.setSequenceId($e.getSequenceId());
 end
 
-rule "Buy Request Confirmation 2nd Business Failure"
+/*rule "Buy Request Confirmation 2nd Business Failure"
 	when
-		$e: Event(type=="BUYCONF", originator=="store", responder=="buyer", status=="bizfail")
+		$e: Event(type=="BUYCONF", originator=="store", responder=="buyer", status=="tecfail")
 		eval(ropSeller.matchesObligations("React To Buy Request") && buyConfirm.getBusinessFailure()==true)
 	then
 
@@ -188,7 +188,7 @@ rule "Buy Request Confirmation 2nd Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-
+   */
 // Rule 5: buyer pays. Obligation satisfied, The buyer regains the right to submit Buy Requests.
 rule "Payment Received"
 	when
@@ -206,7 +206,7 @@ end
 
 rule "Payment 1st Business Failure"
 	when
-		$e: Event(type=="BUYPAY", originator=="buyer", responder=="store", status=="bizfail")
+		$e: Event(type=="BUYPAY", originator=="buyer", responder=="store", status=="tecfail")
 		eval(ropBuyer.matchesObligations(payment) && payment.getBusinessFailure()==false)
 	then
 		payment.setBusinessFailure(true);
@@ -215,10 +215,10 @@ rule "Payment 1st Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-
+/*
 rule "Payment 2nd Business Failure"
 	when
-		$e: Event(type=="BUYPAY", originator=="buyer", responder=="store", status=="bizfail")
+		$e: Event(type=="BUYPAY", originator=="buyer", responder=="store", status=="tecfail")
 		eval(ropBuyer.matchesObligations(payment) && payment.getBusinessFailure()==true)
 	then
 
@@ -230,7 +230,7 @@ rule "Payment 2nd Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-
+  */
 rule "Buy cancelation"
 	when
 		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="success")
@@ -250,7 +250,7 @@ end
 
 rule "Cancelation 1st Business Failure"
 	when
-		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="bizfail")
+		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="tecfail")
 		eval(ropBuyer.matchesRights(cancelation) && cancelation.getBusinessFailure()== false)
 	then
 		// Buyer's Obligation is satisfied, remove it.
@@ -260,10 +260,10 @@ rule "Cancelation 1st Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-
+/*
 rule "Cancelation 2nd Business Failure"
 	when
-		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="bizfail")
+		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="tecfail")
 		eval(ropBuyer.matchesRights(cancelation) && cancelation.getBusinessFailure()== true)
 	then
 		// Buyer's Obligation is satisfied, remove it.
@@ -276,7 +276,7 @@ rule "Cancelation 2nd Business Failure"
 		responder.setContractCompliant(true);
 		responder.setSequenceId($e.getSequenceId());
 end
-
+   */
 // Rule: Reset state of CCC after last message of sequence
 rule "Reset"
 
