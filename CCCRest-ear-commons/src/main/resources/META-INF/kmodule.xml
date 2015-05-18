@@ -2,7 +2,7 @@
 <kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://jboss.org/kie/6.0.0/kmodule">
 <kbase name="CCCBase" packages="uk.ac.ncl.ccc.rules">
-    <ksession name="CCCKS" type="stateless" default="true" clockType="realtime">
+    <ksession name="CCCKS" type="stateful" default="true" clockType="realtime">
         <fileLogger file="drools" threaded="true" interval="10"/>
         <listeners>
             <ruleRuntimeEventListener type="uk.ac.ncl.util.CustomWorkingMemoryEventListener"/>

@@ -78,7 +78,8 @@ rule "Buy Request Business 1st Failure"
 		responder.setSequenceId($e.getSequenceId());
 end
 
-/*rule "Buy Request Business 2nd Failure"
+/*
+rule "Buy Request Business 2nd Failure"
 	when
 		// Verify type of event, originator, and responder
 		$e: Event(type=="BUYREQ", originator=="buyer", responder=="store", status=="tecfail")
@@ -91,8 +92,8 @@ end
         CCCLogger.logTrace("* Buy Request Business Failure 2 rule triggered");
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
-end */
-
+end
+   */
 /* Rule 2: having received a reject Buy Request event from the seller, the pending obligation
 * is satisfied. Restore buyer's right to submit Buy Requests.
 */
@@ -128,8 +129,8 @@ rule "Buy Request Rejected Business 1st Failure"
         responder.setSequenceId($e.getSequenceId());
 end
 
-
-/*rule "Buy Request Rejected Business 2nd Failure"
+      /*
+rule "Buy Request Rejected Business 2nd Failure"
 	when
 		$e: Event(type=="BUYREJ", originator=="store", responder=="buyer", status=="tecfail")
 		eval(ropSeller.matchesObligations("React To Buy Request") && buyReject.getBusinessFailure()==true)
@@ -142,7 +143,7 @@ end
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-   */
+*/
 /* Rule 3: having received an accept Buy Request event from the seller, the pending obligation
 * is satisfied. New obligation on buyer to pay seller. */
 rule "Buy Request Confirmation"
@@ -174,8 +175,8 @@ rule "Buy Request Confirmation 1st Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-
-/*rule "Buy Request Confirmation 2nd Business Failure"
+/*
+rule "Buy Request Confirmation 2nd Business Failure"
 	when
 		$e: Event(type=="BUYCONF", originator=="store", responder=="buyer", status=="tecfail")
 		eval(ropSeller.matchesObligations("React To Buy Request") && buyConfirm.getBusinessFailure()==true)
@@ -230,7 +231,8 @@ rule "Payment 2nd Business Failure"
 		responder.setContractCompliant(true);
         responder.setSequenceId($e.getSequenceId());
 end
-  */
+*/
+
 rule "Buy cancelation"
 	when
 		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="success")
@@ -275,8 +277,8 @@ rule "Cancelation 2nd Business Failure"
 
 		responder.setContractCompliant(true);
 		responder.setSequenceId($e.getSequenceId());
-end
-   */
+end  */
+
 // Rule: Reset state of CCC after last message of sequence
 rule "Reset"
 

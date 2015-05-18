@@ -4,34 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.drools.*;
-import org.drools.agent.KnowledgeAgent;
-import org.drools.agent.KnowledgeAgentConfiguration;
-import org.drools.agent.KnowledgeAgentFactory;
-import org.drools.builder.KnowledgeBuilder;
-import org.drools.builder.KnowledgeBuilderErrors;
-import org.drools.builder.KnowledgeBuilderFactory;
-import org.drools.builder.ResourceType;
-import org.drools.common.InternalWorkingMemoryEntryPoint;
-import org.drools.compiler.*;
-import org.drools.conf.MBeansOption;
-import org.drools.definition.KnowledgePackage;
-import org.drools.definition.rule.Global;
-import org.drools.io.ResourceChangeScannerConfiguration;
-import org.drools.io.ResourceFactory;
-import org.drools.logger.KnowledgeRuntimeLogger;
-import org.drools.logger.KnowledgeRuntimeLoggerFactory;
-import org.drools.runtime.Globals;
-import org.drools.runtime.KnowledgeSessionConfiguration;
-import org.drools.runtime.StatefulKnowledgeSession;
-import org.drools.runtime.conf.ClockTypeOption;
-import org.drools.time.SessionPseudoClock;
-import org.drools.runtime.rule.WorkingMemoryEntryPoint;
 
-<<<<<<< HEAD:CCCRest-ear/CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/RelevanceEngine.java
-import uk.ac.ncl.util.CustomAgendaEventListener;
-import uk.ac.ncl.util.CustomWorkingMemoryEventListener;
-=======
 import org.drools.compiler.compiler.DroolsParserException;
 
 
@@ -39,8 +12,8 @@ import org.kie.api.KieServices;
 import org.kie.api.builder.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.StatelessKieSession;
 import uk.ac.ncl.logging.CCCLogger;
->>>>>>> added file logging configuration:CCCRest-ear-commons/src/main/java/uk/ac/ncl/erop/RelevanceEngine.java
 import uk.ac.ncl.xml.CCCResponse;
 
 /**
@@ -51,10 +24,7 @@ public class RelevanceEngine {
 
     private final static Logger log = Logger.getLogger(RelevanceEngine.class.toString());
 
-    // /* Private data
-    static KnowledgeBase ruleBase;
-
-    static StatefulKnowledgeSession workingMem;
+    static KieSession workingMem;
 
     static LinkedList<Event> eventQueue = new LinkedList<Event>();
     static EventLogger eventLogger = null;
@@ -76,12 +46,12 @@ public class RelevanceEngine {
      * @param builder  the builder
      * @param fileName the file name
      */
-    private static void handleCompilationErrors(KnowledgeBuilder builder, String fileName) {
-        KnowledgeBuilderErrors builderErrors = builder.getErrors();
-        String[] errorMsg = new String[builderErrors.size() + 1];
+    private static void handleCompilationErrors(KieBuilder builder, String fileName) {
+        Results builderErrors = builder.getResults();
+        String[] errorMsg = new String[builderErrors.getMessages().size() + 1];
         errorMsg[0] = new String("Compilation errors for file " + fileName);
-        for (int i = 0; i < builderErrors.size(); i++) {
-            errorMsg[i + 1] = builderErrors.iterator().next().getMessage();
+        for (int i = 0; i < builderErrors.getMessages().size(); i++) {
+            errorMsg[i + 1] = builderErrors.getMessages().iterator().next().getText();
         }
         ErrorMessageManager.fatalErrorMsg(errorMsg);
     }
@@ -98,95 +68,18 @@ public class RelevanceEngine {
         // Verify that the EventLogger is not null
         if (el == null)
             throw new IllegalArgumentException("EventLogger ref null");
+      /* TODO refactor method to use the new kie packages */
+        KieServices ks = KieServices.Factory.get();
 
-        // Create KnowledgeBuilder
-        KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-
-        try {
-            builder.add(ResourceFactory.newFileResource(fileName), ResourceType.CHANGE_SET);
-        } catch (Exception e) {
-            ErrorMessageManager.fatalErrorMsg("Exception opening file resource " + fileName, e);
-        }
-
-        // Check if the compilation was successful
-        if (builder.hasErrors()) {
-            handleCompilationErrors(builder, fileName);
-        }
-        KnowledgeBaseConfiguration config = KnowledgeBaseFactory.newKnowledgeBaseConfiguration();
-
-        //enable knowledge session monitoring using JMX
-        config.setOption(MBeansOption.ENABLED);
-
-        ruleBase = KnowledgeBaseFactory.newKnowledgeBase("CCCbase", config);
-        ruleBase.addKnowledgePackages(builder.getKnowledgePackages());
-        KnowledgeAgentConfiguration aconf = KnowledgeAgentFactory.newKnowledgeAgentConfiguration();
-
-        /*
-        *
-        *   false: make the agent keep and incrementally update the existing knowledge base, automatically updating all existing sessions
-        *   true: make the agent to create a brand new KnowledgeBase  every time there is a change to the source assets.
-        *
-        */
-        aconf.setProperty("drools.agent.newInstance", "false");
-
-        KnowledgeAgent kagent = KnowledgeAgentFactory.newKnowledgeAgent("CCCagent", ruleBase, aconf);
-        kagent.applyChangeSet(ResourceFactory.newFileResource(fileName));
-        ruleBase = kagent.getKnowledgeBase();
-        ResourceChangeScannerConfiguration sconf = ResourceFactory.getResourceChangeScannerService()
-                .newResourceChangeScannerConfiguration();
-
-        // set disc scanning interval in seconds
-        sconf.setProperty("drools.resource.scanner.interval", "10");
-
-        ResourceFactory.getResourceChangeScannerService().configure(sconf);
-
-        KnowledgeSessionConfiguration sconfig = KnowledgeBaseFactory.newKnowledgeSessionConfiguration();
-
-        /*
-        *
-        *   realtime: uses the system clock to determine the current time for timestamps.
-        *   pseudo:  for testing temporal rules since it can be controlled by the application.
-        *
-         */
-        sconfig.setOption(ClockTypeOption.get("realtime"));
-
-        workingMem = ruleBase.newStatefulKnowledgeSession(sconfig, null);
-        //SessionPseudoClock clock = workingMem.getSessionClock();
-
-        workingMem.addEventListener(new CustomAgendaEventListener());
-        workingMem.addEventListener(new CustomWorkingMemoryEventListener());
-
-        //KnowledgeRuntimeLogger rulesLogger = KnowledgeRuntimeLoggerFactory.newConsoleLogger(workingMem);
-
-        ResourceFactory.getResourceChangeNotifierService().start();
-        ResourceFactory.getResourceChangeScannerService().start();
-
+        KieContainer ruleBase = ks.getKieClasspathContainer();
+//        workingMem = ruleBase.newStatelessKieSession("CCCKS");
+        workingMem = ruleBase.newKieSession("CCCKS");
         eventLogger = el;
 
-        /*
-        *
-        *   Creates a file logger that executes in a different thread, where information is written on given intervals (in milliseconds).
-        *   Logs the execution of the session for later inspection
-        *
-         */
-        final KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(workingMem,
-                "ruleLog", 1000);
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            public void run() {
-
-                if (logger != null) {
-
-                    logger.close();
-
-                }
-
-            }
-
-        });
     }
-
+public static void bootstrapRelevanceEngine(){
+    //InputStream schemaIS = getClassLoader().getResourceAsStream("META-INF/kcontract.xml");
+}
     /**
      * Initialize contract.
      *
@@ -197,8 +90,9 @@ public class RelevanceEngine {
         // Pass global objects to the working memory
         // workingMem.setGlobal("engine", this);
         workingMem.setGlobal("logger", eventLogger);
-        // TODO: Doing this manually here now, but a proper loader needs to be
-        // written!
+        /* TODO: Doing this manually here now, but a proper loader needs to be  written! */
+        /* TODO: load dynamic properties of an electronic contract -> a bootstrap mechanism */
+        //
 
         // BusinessOperation buyAcceptance = new
         // BusinessOperation("Buy Acceptance");
@@ -259,7 +153,7 @@ public class RelevanceEngine {
         workingMem.setGlobal("buyReject", buyReject);
         workingMem.setGlobal("buyConfirm", buyConfirm);
         workingMem.setGlobal("cancelation", cancelation);
-
+//        workingMem.setGlobal("System.out", System.out);
         // workingMem.setGlobal("cccResponse", cccResponse);
 
         // workingMem.setGlobal("payment", payment);
