@@ -1,6 +1,0 @@
-<event>
-  <originator>buyer</originator>
-  <responder>store</responder>
-  <type>BUYPAY</type>
-  <status>success</status>
-</event>
