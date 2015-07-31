@@ -372,8 +372,8 @@ under the License.
   <!-- jboss.org config start -->
   <activeProfiles>
     <activeProfile>jboss-public-repository</activeProfile>
-    <activeProfile>wildfly-local</activeProfile>
-    <activeProfile>wildfly-remote</activeProfile>
+    <!-- <activeProfile>wildfly-local</activeProfile> -->
+    <!-- <activeProfile>wildfly-remote</activeProfile> -->
   <activeProfile>jboss-ga</activeProfile>
     </activeProfiles>
   <!-- jboss.org config end -->
