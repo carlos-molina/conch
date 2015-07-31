@@ -1,0 +1,3 @@
+@echo off
+echo Starting JBOSS EAP..............
+CALL "%JBOSS_HOME%"/bin/standalone.bat -c standalone-full.xml -b 0.0.0.0
