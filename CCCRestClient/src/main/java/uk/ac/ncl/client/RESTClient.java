@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -33,8 +34,10 @@ import org.jboss.resteasy.spi.Link;
  */
 public class RESTClient {
 
-	private static final String BUSINESS_EVENT_QUEUE_URL = "http://localhost:8088/CCCRest-ear-web/queues/jms.queue.events";
-	private static final String REPLY_QUEUE_URL = "http://localhost:8088/CCCRest-ear-web/queues/jms.queue.replyQueue";
+//	private static final String BUSINESS_EVENT_QUEUE_URL = "http://ccc-110495017.rhcloud.com/CCCRest-ear-web/queues/jms.queue.events";
+	private static final String BUSINESS_EVENT_QUEUE_URL = "http://localhost:8080/CCCRest-ear-web/queues/jms.queue.events";
+//	private static final String REPLY_QUEUE_URL = "http://ccc-110495017.rhcloud.com/CCCRest-ear-web/queues/jms.queue.replyQueue";
+	private static final String REPLY_QUEUE_URL = "http://localhost:8080/CCCRest-ear-web/queues/jms.queue.replyQueue";
 
 	private final static Logger log = Logger.getLogger(RESTClient.class.toString());
 	private static ClientRequest request;
@@ -51,7 +54,7 @@ public class RESTClient {
 
 		String folderPath = args[0];
 
-		if (folderPath == "") {
+		if (folderPath.equals("")) {
 
 			System.out.println("blank folder path");
 			System.exit(1);
@@ -200,7 +203,7 @@ public class RESTClient {
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		BusinessEvent bevent = (BusinessEvent) jaxbUnmarshaller.unmarshal(file);
-		// System.out.println(bevent);
+		System.out.println(bevent);
 
 		request = new ClientRequest(BUSINESS_EVENT_QUEUE_URL);
 		ClientResponse response = request.head();
@@ -233,7 +236,7 @@ public class RESTClient {
 
 		Link consume = new Link();
 		consume.setHref(consumeNext);
-		res = consume.request().header("Accept-Wait", "5").header("Accept", "application/xml").post();
+		res = consume.request().header("Accept-Wait", "35").header("Accept", "application/xml").post();
 		// System.out.println("response status: " + res.getStatus());
 		// System.out.println("response: " + res.toString());
 

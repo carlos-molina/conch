@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Class: RestClient
+Class: uk.ac.ncl.client.RESTClient

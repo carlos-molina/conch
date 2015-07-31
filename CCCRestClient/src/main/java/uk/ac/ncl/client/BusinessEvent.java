@@ -5,7 +5,6 @@ package uk.ac.ncl.client;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
@@ -25,19 +24,12 @@ public class BusinessEvent implements Serializable {
 
 
 	private static final long serialVersionUID = 1L;
-
-
+	private String sequenceId;
 	private Long id;
-
 	private String originator;
-
 	private String responder;
-
-
 	private Date timestamp;
-
 	private String type;
-
 	private String status;
 
 
@@ -50,12 +42,14 @@ public class BusinessEvent implements Serializable {
 	 * @param type
 	 * @param status
 	 */
-	public BusinessEvent(String originator, String responder, String type, String status) {
+	public BusinessEvent(String sequenceId, String originator, String responder, String type, String status) {
 		super();
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
 		this.status = status;
+
 	}
 
 
@@ -66,6 +60,21 @@ public class BusinessEvent implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+
+	/**
+	 *
+	 * @return sequenceId the id for a particular sequence generated from epromela
+	 */
+	@XmlElement(name = "sequenceId")
+	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+	public String getSequenceId() {
+		return sequenceId;
+	}
+
+	public void setSequenceId(String sequenceId) {
+		this.sequenceId = sequenceId;
 	}
 
 	/**
@@ -151,29 +160,16 @@ public class BusinessEvent implements Serializable {
 		this.status = status;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("BusinessEvent [");
-		if (id != null)
-			builder.append("id=").append(id).append(", ");
-		if (originator != null)
-			builder.append("originator=").append(originator).append(", ");
-		if (responder != null)
-			builder.append("responder=").append(responder).append(", ");
-		if (timestamp != null)
-			builder.append("timestamp=").append(timestamp).append(", ");
-		if (type != null)
-			builder.append("type=").append(type).append(", ");
-		if (status != null)
-			builder.append("status=").append(status);
-		builder.append("]");
-		return builder.toString();
+		return "BusinessEvent{" +
+				"sequenceId='" + sequenceId + '\'' +
+				", id=" + id +
+				", originator='" + originator + '\'' +
+				", responder='" + responder + '\'' +
+				", timestamp=" + timestamp +
+				", type='" + type + '\'' +
+				", status='" + status + '\'' +
+				'}';
 	}
-
 }
