@@ -249,7 +249,7 @@ public class RESTClient {
 		} else if (res.getStatus() == 200) {
 			consumeNext = getNextMessageUrl(res);
 
-			CCCResponse response = (CCCResponse) res.getEntity(CCCResponse.class);
+			CCCResponse response = res.getEntity(CCCResponse.class);
 			// System.out.println(response);
 
 			JAXBContext jaxbContext1 = JAXBContext.newInstance(CCCResponse.class);

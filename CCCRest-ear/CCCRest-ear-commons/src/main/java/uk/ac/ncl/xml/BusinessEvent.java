@@ -18,7 +18,7 @@ public class BusinessEvent implements Serializable {
 	private String status;
 	//String timeStamp;
 
-	private  String id;
+//	private  String id;
 
 	public BusinessEvent(){
 
@@ -38,7 +38,7 @@ public class BusinessEvent implements Serializable {
 		this.responder = responder;
 		this.type = type;
 		this.status = status;
-		this.id = id;
+//		this.id = id;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class BusinessEvent implements Serializable {
 	/**
 	 * Sets the originator.
 	 *
-	 * @param origianator the new originator
+	 * @param originator the new originator
 	 */
 	public void setOriginator(String originator) {
 		this.originator = originator;
@@ -166,14 +166,14 @@ public class BusinessEvent implements Serializable {
 //		this.timeStamp = timeStamp;
 //	}
 
-	@XmlAttribute
-	public String getEventId() {
-		return id;
-	}
-
-	public void setEventId(String id) {
-		this.id = id;
-	}
+//	@XmlAttribute
+//	public String getEventId() {
+//		return id;
+//	}
+//
+//	public void setEventId(String id) {
+//		this.id = id;
+//	}
 
 
 	@Override
@@ -184,7 +184,7 @@ public class BusinessEvent implements Serializable {
 				", responder='" + responder + '\'' +
 				", type='" + type + '\'' +
 				", status='" + status + '\'' +
-				", id='" + id + '\'' +
+//				", id='" + id + '\'' +
 				'}';
 	}
 }

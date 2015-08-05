@@ -25,10 +25,10 @@ public class BusinessEvent implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String sequenceId;
-	private Long id;
+//	private Long id;
 	private String originator;
 	private String responder;
-	private Date timestamp;
+//	private Date timestamp;
 	private String type;
 	private String status;
 
@@ -58,9 +58,9 @@ public class BusinessEvent implements Serializable {
 		this.type = type;
 	}
 
-	public Long getId() {
-		return id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
 
 
 	/**
@@ -113,18 +113,18 @@ public class BusinessEvent implements Serializable {
 
 	/**
 	 * @return the timestamp
-	 */
-	public Date getTimestamp() {
-		return timestamp;
-	}
+//	 */
+//	public Date getTimestamp() {
+//		return timestamp;
+//	}
 
 	/**
 	 * @param timestamp
 	 *            the timestamp to set
 	 */
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
+//	public void setTimestamp(Date timestamp) {
+//		this.timestamp = timestamp;
+//	}
 
 	/**
 	 * @return the type
@@ -164,10 +164,10 @@ public class BusinessEvent implements Serializable {
 	public String toString() {
 		return "BusinessEvent{" +
 				"sequenceId='" + sequenceId + '\'' +
-				", id=" + id +
+//				", id=" + id +
 				", originator='" + originator + '\'' +
 				", responder='" + responder + '\'' +
-				", timestamp=" + timestamp +
+//				", timestamp=" + timestamp +
 				", type='" + type + '\'' +
 				", status='" + status + '\'' +
 				'}';
