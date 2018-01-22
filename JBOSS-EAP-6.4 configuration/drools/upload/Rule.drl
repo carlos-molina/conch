@@ -1,0 +1,427 @@
+import uk.ac.ncl.core.*;
+import uk.ac.ncl.checker.*;
+import uk.ac.ncl.resource.*;
+import uk.ac.ncl.model.*;
+import uk.ac.ncl.event.*;
+import uk.ac.ncl.util.*;
+import uk.ac.ncl.state.RopState.ObligationState;
+import uk.ac.ncl.state.RopState.RightState;
+import uk.ac.ncl.state.RopState.ProhibitionState;
+import uk.ac.ncl.rop.Obligation;
+import uk.ac.ncl.rop.Prohibition;
+import uk.ac.ncl.rop.Right;
+import uk.ac.ncl.rop.RopEntity;
+import uk.ac.ncl.event.Operation;
+import uk.ac.ncl.core.Deadline;
+import uk.ac.ncl.logging.CCCLogger;
+import uk.ac.ncl.event.Operation.OperationName;
+import uk.ac.ncl.user.User;
+
+import java.util.Date;
+import java.util.Calendar;
+
+global RelevanceEngine engine;
+global EventLogger logger;
+global TimingMonitor timingMonitor;
+global Responder responder;
+global DateParser dateParser;
+global DataChecker dataChecker;
+global CCCLogger cccloger;
+
+rule "Registration"
+    when
+       $e:Event (operation.getName() == OperationName.register, status == EventStatus.succeed)
+       $user:User(role == "PI")
+    then
+       CCCLogger.logInfo("Registration rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       Right uploadData = new Right(new Operation(OperationName.upload, "data", null));
+       Right uploadTool = new Right(new Operation(OperationName.upload, "tool", null));
+       $user.addRight(uploadData);
+       $user.addRight(uploadTool);
+
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("Registration rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "LargeDataUploadAfterObligationDeadline"
+    when
+        Date($now : time) from Calendar.getInstance().getTime()
+        $user:User(role == "PI")
+        $right:Right(state == RightState.granted)
+        $obligation:Obligation(state == ObligationState.imposed, deadline.getTime() < $now)
+
+    then
+        CCCLogger.logInfo("LargeDataUploadAfterObligationDeadline" + " success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        CCCLogger.logInfo("now: " + Calendar.getInstance().getTime());
+        CCCLogger.logInfo("deadline: " + $obligation.getDeadline().getTime());
+        $obligation.setState(ObligationState.violated);
+        responder.setContractCompliant(false);
+        responder.setMessage("Obligation violated");
+        CCCLogger.logInfo("LargeDataUploadAfterObligationDeadline" + " success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "Large Data Upload After Deadline Callback"
+    when
+        Date($now : time) from Calendar.getInstance().getTime()
+//        $ev:Event($timestamp: timestamp != null)
+        $e:Event(status == EventStatus.succeed, timestamp != null, timestamp.getTime() < $now)
+//        $user:User(role == "PI")
+//        $right:Right(state == RightState.granted)
+        $obligation:Obligation(state == ObligationState.imposed, deadline.getTime() < $now)
+
+    then
+        CCCLogger.logInfo("Large Data Upload After Deadline Callback" + " success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        CCCLogger.logInfo("now: " + Calendar.getInstance().getTime());
+        CCCLogger.logInfo("deadline: " + $obligation.getDeadline().getTime());
+        $obligation.setState(ObligationState.violated);
+        responder.setContractCompliant(false);
+        responder.setMessage("Obligation to upload is violated after deadline");
+        CCCLogger.logInfo("Large Data Upload After Deadline Callback" + " success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "DataUpload"
+    when
+        $e:Event (operation.getName() == OperationName.upload, operation.getType() == "data", status == EventStatus.unChecked)
+        Date($now : time) from Calendar.getInstance().getTime()
+        $user:User(role == "PI")
+        $right:Right(state == RightState.granted)
+        not (exists Obligation()) or $obligation:Obligation(state == ObligationState.imposed, deadline.getTime() >= $now)
+
+    then
+        CCCLogger.logInfo("DataUpload" + " rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        $right.setState(RightState.executing);
+        responder.setContractCompliant(true);
+        CCCLogger.logInfo("DataUpload"  + " rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "LargeDataUploadSuccess"
+    when
+        Date($now : time) from Calendar.getInstance().getTime()
+        $e:Event (operation.getName() == OperationName.upload, operation.getType() == "data", status == EventStatus.succeed)
+        $right:Right(state == RightState.executing)
+        $user:User(role == "PI")
+        not (exists Obligation()) or $obligation:Obligation(state == ObligationState.imposed, deadline.getTime() >= $now)
+        eval(dataChecker.getSize(($e.getOperation().getObject())) > 1024*1024)
+    then
+        CCCLogger.logInfo("LargeDataUploadSuccess" + " success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        $right.fulfil();
+        Obligation addDependency = new Obligation (new Operation(OperationName.addDependency, "data", $e.getOperation().getObject()), dateParser.parse("30/04/2016 13:55:00"));
+//        Obligation addDependencyTools = new Obligation (new Operation(OperationName.addDependency, "tool", $e.getOperation().getObject()), dateParser.parse("21/03/2016 12:00:00"));
+
+//        Obligation remove = new Obligation (new Operation(OperationName.remove, "data", $e.getOperation().getObject()), dateParser.parse("18/03/2016 17:20:00"));
+        Prohibition removeData = new Prohibition (new Operation(OperationName.remove, "data", $e.getOperation().getObject()));
+//        Prohibition removeTools = new Prohibition (new Operation(OperationName.remove, "tool", $e.getOperation().getObject()));
+        $user.addObligation(addDependency);
+        $user.addProhibition(removeData);
+
+        responder.setContractCompliant(true);
+
+        CCCLogger.logInfo("now: " + Calendar.getInstance().getTime());
+        CCCLogger.logInfo("deadline: " + addDependency.getDeadline().getTime());
+        CCCLogger.logInfo("LargeDataUploadSuccess" + " success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "SmallDataUploadSuccess"
+dialect "mvel"
+    when
+        $e:Event (operation.getName() == OperationName.upload, operation.getType() == "data", status == EventStatus.succeed)
+        $right:Right(state == RightState.executing)
+        $user:User(role == "PI")
+
+        eval(dataChecker.getSize(($e.getOperation().getObject())) <= 1024*1024)
+
+    then
+        CCCLogger.logInfo("Small Data Upload Success " + " suceess rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        CCCLogger.logInfo("file size: " + dataChecker.getSize($e.getOperation().getObject()));
+        $right.fulfil();
+        Right download = new Right (new Operation(OperationName.download, "data", $e.getOperation().getObject()));
+        Right updatePublication = new Right (new Operation(OperationName.update, "data", $e.getOperation().getObject()), dateParser.parse("09/04/2016 16:12:00"));
+        Prohibition remove = new Prohibition (new Operation(OperationName.remove, "data", $e.getOperation().getObject()));
+        $user.addRight(updatePublication);
+        $user.addProhibition(remove);
+        $user.addRight(download);
+        responder.setContractCompliant(true);
+        CCCLogger.logInfo("Small Data Upload Success " + " success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+
+
+rule "DataUploadFail"
+
+    when
+       $e:Event (operation.getName() == OperationName.upload, operation.getType() == "data", status == EventStatus.failed)
+       $right:Right(state == RightState.executing)
+       $user:User(role == "PI")
+
+     then
+       CCCLogger.logInfo( "DataUploadFail fail rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $right.setState(RightState.granted);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("DataUploadFail fail rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "ProhibitedDateRemove"
+
+    when
+       $e:Event (operation.getName() == OperationName.remove, operation.getType() == "data", status == EventStatus.unChecked)
+       $prohibition:Prohibition(state == ProhibitionState.imposed)
+       $user:User(role == "PI")
+
+    then
+      CCCLogger.logInfo("ProhibitedDateRemove rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $prohibition.setState(ProhibitionState.executing);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo("ProhibitedDateRemove rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "ProhibitedDateRemoveSuccess"
+
+    when
+       $e:Event (operation.getName() == OperationName.remove, operation.getType() == "data", status == EventStatus.succeed)
+       $prohibition:Prohibition(state == ProhibitionState.executing)
+       $user:User(role == "PI")
+
+    then
+      CCCLogger.logInfo("ProhibitedDateRemoveSuccess success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $prohibition.setState(ProhibitionState.fulfilled);
+      Right updatePublication = new Right(new Operation(OperationName.update, "data", $e.getOperation().getObject()));
+      Right uploadData = new Right(new Operation(OperationName.upload, "data", null));
+      Right uploadTool = new Right(new Operation(OperationName.upload, "project", null));
+      Right download = new Right (new Operation(OperationName.download, "data", $e.getOperation().getObject()));
+      $user.addRight(updatePublication);
+      $user.addRight(uploadData);
+      $user.addRight(uploadTool);
+      $user.addRight(download);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo("ProhibitedDateRemoveSuccess success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+
+rule "ProhibitedDateRemoveFail"
+
+    when
+       $e:Event (operation.getName() == OperationName.remove, operation.getType() == "data", status == EventStatus.failed)
+       $prohibition:Prohibition(state == ProhibitionState.executing)
+       $user:User(role == "PI")
+
+    then
+      CCCLogger.logInfo("Prohibited "+$e.getOperation().getName()+ " fail rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $prohibition.setState(ProhibitionState.imposed);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo("Prohibited "+$e.getOperation().getName()+ " fail rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+
+rule "AddDependency"
+
+   when
+       $e:Event (operation.getName() == OperationName.addDependency, operation.getType() == "data", status == EventStatus.unChecked)
+       $obligation:Obligation(state == ObligationState.imposed)
+       $user:User(role == "PI")
+
+   then
+       CCCLogger.logInfo("Add dependency rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $obligation.setState(ObligationState.executing);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("Add dependency rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "AddDependencySuccess"
+
+   when
+       $e:Event (operation.getName() == OperationName.addDependency, operation.getType() == "data", status == EventStatus.succeed)
+       $obligation:Obligation(state == ObligationState.executing)
+       $user:User(role == "PI")
+
+   then
+       CCCLogger.logInfo("AddDependencySuccess rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $obligation.setState(ObligationState.fulfilled);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("AddDependencySuccess rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "AddDependencyFail"
+
+   when
+       $e:Event (operation.getName() == OperationName.addDependency, operation.getType() == "data", status == EventStatus.failed)
+       $obligation:Obligation(state == ObligationState.executing)
+       $user:User(role == "PI")
+
+   then
+       CCCLogger.logInfo("AddDependencyFail fail rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $obligation.setState(ObligationState.imposed);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("AddDependencyFail fail rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "DataRemove"
+
+    when
+        $e:Event (operation.getName() == OperationName.remove, operation.getType() == "data", status == EventStatus.unChecked)
+        $obligation:Obligation(state == ObligationState.imposed)
+        eval(dataChecker.checkDependency($e.getOperation().getObject()))
+        //eval(dateParser.calculate(dataChecker.getLastVisit($e.getOperation().getObject()))> 365)
+        eval($e.getUsername().equals(dataChecker.getUser($e.getOperation().getObject())))
+        $user:User(role == "PI")
+    then
+       CCCLogger.logInfo("DAtaRemove rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $obligation.setState(ObligationState.executing);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("DataRemove rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "DataRemoveSuccess"
+
+    when
+       $e:Event (operation.getName() == OperationName.remove, operation.getType() == "data", status == EventStatus.succeed)
+       $obligation:Obligation(state == ObligationState.executing)
+       $user:User(role == "PI")
+
+    then
+      CCCLogger.logInfo( "DataREmoveSuccess success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $obligation.setState(ObligationState.fulfilled);
+      Obligation addDependency = new Obligation (new Operation(OperationName.addDependency, "data", $e.getOperation().getObject()), null);
+      $user.removeRopEntity(addDependency);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo("DataRemoveSuccess success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "DataRemoveFail"
+
+    when
+       $e:Event (operation.getName() == OperationName.remove, operation.getType() == "data", status == EventStatus.failed)
+       $obligation:Obligation(state == ObligationState.executing)
+       $user:User(role == "PI")
+
+    then
+      CCCLogger.logInfo("DataRemoveFail fail rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $obligation.setState(ObligationState.imposed);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo("DataRemoveFail fail rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "Update"
+
+    when
+       $e:Event (operation.getName() == OperationName.update, operation.getType() == "data", status == EventStatus.unChecked)
+       $right:Right(state == RightState.granted)
+       $user:User(role == "PI")
+
+    then
+       CCCLogger.logInfo("UPdate  rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	   $right.setState(RightState.executing);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("Update rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "UpdateSuccess"
+
+    when
+       $e:Event (operation.getName() == OperationName.update, operation.getType() == "data", status == EventStatus.succeed)
+       $right:Right(state == RightState.executing)
+       $user:User(role == "PI")
+
+    then
+       CCCLogger.logInfo( "UpdateSuccess success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $right.fulfil();
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("UpdateSuccess success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "UpdateFail"
+
+   when
+       $e:Event (operation.getName() == OperationName.update, operation.getType() == "data", status == EventStatus.failed)
+       $right:Right(state == RightState.executing)
+       $user:User(role == "PI")
+   then
+       CCCLogger.logInfo( "UpdateFail fail rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $right.setState(RightState.granted);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("UpdateFail fail rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "Download"
+
+   when
+       $e:Event (operation.getName() == OperationName.download, operation.getType() == "data", status == EventStatus.unChecked)
+       $right:Right(state == RightState.granted)
+       $user:User(role == "PI")
+
+   then
+       CCCLogger.logInfo("Download  rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $right.setState(RightState.executing);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("Download rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "DownloadSuccess"
+
+   when
+       $e:Event (operation.getName() == OperationName.download, operation.getType() == "data", status == EventStatus.succeed)
+       $right:Right(state == RightState.executing)
+       $user:User(role == "PI")
+
+   then
+       CCCLogger.logInfo( "DownloadSuccess success rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $right.fulfil();
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("DownloadSuccess success rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "DownloadFail"
+
+   when
+       $e:Event (operation.getName() == OperationName.download, operation.getType() == "data", status == EventStatus.failed)
+       $right:Right(state == RightState.executing)
+       $user:User(role == "PI")
+
+   then
+       CCCLogger.logInfo("DownloadFail fail rule is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+       $right.setState(RightState.granted);
+       responder.setContractCompliant(true);
+       CCCLogger.logInfo("DownloadFail fail rule is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+ end
+
+rule "ToolUpload"
+
+   when
+      $e:Event (operation.getName() == OperationName.upload, operation.getType() == "tool", status == EventStatus.unChecked)
+      $right:Right(state == RightState.granted)
+      $user:User(role == "PI")
+
+   then
+      CCCLogger.logInfo($e.getOperation().getName()+ "  rule for tool is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $right.setState(RightState.executing);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo($e.getOperation().getName()+" rule for tool is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "ToolUploadSuccess"
+
+   when
+      $e:Event (operation.getName() == OperationName.upload, operation.getType() == "tool", status == EventStatus.succeed)
+      $right:Right(state == RightState.executing)
+      $user:User(role == "PI")
+
+   then
+      CCCLogger.logInfo($e.getOperation().getName()+ "  success rule for tool is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $right.fulfil();
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo($e.getOperation().getName()+" success rule for tool is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
+
+rule "ToolUploadFail"
+
+   when
+      $e:Event (operation.getName() == OperationName.upload, operation.getType() == "tool", status == EventStatus.failed)
+      $right:Right(state == RightState.executing)
+      $user:User(role == "PI")
+
+   then
+      CCCLogger.logInfo($e.getOperation().getName()+ "  success rule for tool is triggered!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      $right.setState(RightState.granted);
+      responder.setContractCompliant(true);
+      CCCLogger.logInfo($e.getOperation().getName()+" success rule for tool is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+end
