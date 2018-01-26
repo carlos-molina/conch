@@ -11,6 +11,7 @@ import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.jboss.resteasy.spi.Link;
+
 import javax.ws.rs.core.MultivaluedMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
  * @author <a href="mailto:i.sfyrakis@ncl.ac.uk">Ioannis Sfyrakis</a>
  * @author last edited by: $$Author: b1049501 $$
  * @version $$Revision: 398 $$, $$Date: 2012-08-30 13:03:21 +0100 (Thu, 30 Aug
- *          2012) $$
+ * 2012) $$
  */
 public class RESTClient {
 
