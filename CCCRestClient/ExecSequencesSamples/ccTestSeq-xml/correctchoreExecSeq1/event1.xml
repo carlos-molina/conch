@@ -1,5 +1,5 @@
 <event>
-    <sequenceId>buyerstoreincorrectContExecSeq1</sequenceId>
+  <sequenceId>buyerstoreincorrectContExecSeq1</sequenceId>
   <originator>buyer</originator>
   <responder>store</responder>
   <type>BUYREQ</type>
