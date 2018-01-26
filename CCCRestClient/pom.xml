@@ -8,19 +8,15 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <resteasy.version>2.3.10.Final</resteasy.version>
+        <resteasy.version>2.3.8.Final-redhat-3</resteasy.version>
     </properties>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.8</version>-->
-        <!--</dependency>-->
+
         <dependency>
-        	<groupId>org.apache.logging.log4j</groupId>
-        	<artifactId>log4j-core</artifactId>
-        	<version>2.3</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.3</version>
         </dependency>
         <!-- joda-time -->
         <dependency>
@@ -35,6 +31,28 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxb-provider</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.24.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -45,53 +63,12 @@
             <artifactId>jboss-jms-api_1.1_spec</artifactId>
             <version>1.0.1.Final</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.hornetq.rest</groupId>-->
-            <!--<artifactId>hornetq-rest</artifactId>-->
-            <!--<version>2.4.0.Final</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-jaxrs</artifactId>-->
-            <!--<version>${resteasy.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-jaxb-provider</artifactId>-->
-            <!--<version>${resteasy.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-                <!--<groupId>org.jboss.resteasy</groupId>-->
-                <!--<artifactId>resteasy-jackson-provider</artifactId>-->
-                <!--<version>${resteasy.version}</version>-->
-            <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-multipart-provider</artifactId>-->
-            <!--<version>${resteasy.version}</version>-->
-        <!--</dependency>-->
-
         <dependency>
-              <groupId>org.hornetq.rest</groupId>
-              <artifactId>hornetq-rest</artifactId>
-              <version>2.3.0.Final</version>
-          </dependency>
-          <dependency>
-              <groupId>org.jboss.resteasy</groupId>
-              <artifactId>resteasy-jaxrs</artifactId>
-              <version>2.3.8.Final-redhat-3</version>
-          </dependency>
-          <dependency>
-              <groupId>org.jboss.resteasy</groupId>
-              <artifactId>resteasy-jaxb-provider</artifactId>
-              <version>2.3.8.Final-redhat-3</version>
-          </dependency>
+            <groupId>org.hornetq.rest</groupId>
+            <artifactId>hornetq-rest</artifactId>
+            <version>2.4.0.Final</version>
+        </dependency>
 
-          <dependency>
-              <groupId>org.jboss.resteasy</groupId>
-              <artifactId>resteasy-multipart-provider</artifactId>
-              <version>2.3.8.Final-redhat-3</version>
-          </dependency>
     </dependencies>
 
     <build>
