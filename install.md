@@ -1,3 +1,4 @@
+0. Install java jdk 7
 1. Clone conch repo https://github.com/gsfyrakis/conch (Branch cccv2)
 2. install mysql 5.6 https://dev.mysql.com/downloads/mysql/5.6.html#downloads
 3. download jboss-eap-6.4 https://developers.redhat.com/download-manager/file/jboss-eap-6.4.0.GA-installer.jar or jboss as 7.1.1 http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip
