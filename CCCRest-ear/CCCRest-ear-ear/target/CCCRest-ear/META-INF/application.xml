@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+  <display-name>CCCRest-ear-ear</display-name>
+  <module>
+    <web>
+      <web-uri>CCCRest-ear-web-7.1.1-SNAPSHOT.war</web-uri>
+      <context-root>/CCCRest-ear-web</context-root>
+    </web>
+  </module>
+  <module>
+    <ejb>CCCRest-ear-ejb-7.1.1-SNAPSHOT.jar</ejb>
+  </module>
+  <library-directory>lib</library-directory>
+</application>

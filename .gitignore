@@ -1,0 +1,13 @@
+/CCCRestClient/target
+/CCCRestClient/CCCRestClient.iml
+/CCCRestClient/.idea
+/CCCRest-ear.iml
+/CCCRest-ear-web/target
+/.idea
+/CCCRest-ear-commons/CCCRest-ear-commons.iml
+/CCCRest-ear-commons/target
+/CCCRest-ear-ear/CCCRest-ear-ear.iml
+/CCCRest-ear-ear/target
+/CCCRest-ear-ejb/CCCRest-ear-ejb.iml
+/CCCRest-ear-ejb/target
+/CCCRest-ear-web/CCCRest-ear-web.iml

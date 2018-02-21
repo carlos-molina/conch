@@ -1,5 +1,0 @@
-• C1: The Buyer has the right to place a Buy Request with the Seller to buy an item, as long as it is from Monday to Saturday and from 9am to 5pm (Right). 
-
-• C2: The Seller is obliged to respond with either Buy Confirmation or Buy Rejection within 3 days of receiving the Buy Request (Obligation).
-
-• C3: The Buyer can use its discretion to either Pay for or Cancel the Buy Request within 7 days of receiving a confirmation (Obligation). Canceling the Buy Request is prohibited to the Buyer in any other condition (Prohibition).

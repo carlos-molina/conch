@@ -1,0 +1,7 @@
+<event>
+  <sequenceId>seq159</sequenceId>
+  <originator>store</originator>
+  <responder>buyer</responder>
+  <type>BUYCONF</type>
+  <status>tecfail</status>
+</event>

@@ -1,0 +1,7 @@
+<event>
+  <sequenceId>buyerstoreincorrectContExecSeq238</sequenceId>
+  <originator>buyer</originator>
+  <responder>store</responder>
+  <type>BUYCANC</type>
+  <status>bizfail</status>
+</event>

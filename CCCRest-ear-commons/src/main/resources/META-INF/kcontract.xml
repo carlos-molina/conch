@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcontract>
+    <businessOperations>
+        <bo name="Buy Request"/>
+        <bo name="Buy Request Rejection"/>
+        <bo name="Buy Confirmation"/>
+        <bo name="Payment"/>
+        <bo name="Cancellation"/>
+    </businessOperations>
+    <rolePlayers>
+        <rolePlayer name="buyer"/>
+        <rolePlayer name="seller"/>
+    </rolePlayers>
+    <ropSets>
+        <ropSet name="buyer"/>
+        <ropSet name="seller"/>
+    </ropSets>
+</kcontract>
