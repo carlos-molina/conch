@@ -1,20 +1,17 @@
-conch
-====
+### conch
 
 conch (Contract Checker) is a tool
 that we have implemented for monitoring
 and enforcing executable contracts
 at run time.
 
-Smart Contracts
-=======
+####### Smart contracts
 An executable contract (also called a smart contract) 
 is (at least under my personal definition) a conventional 
 contract that can be converted into executable code, 
 executed and enforced programmatically at run-time.
 
-Smart Contracts and Blockchain
-=======
+####### Smart contracts and blockchain
 The main feature of a smart contract is that its
 executable and capable of monitoring and enforcing 
 contractual commitments (rights, obligations and
