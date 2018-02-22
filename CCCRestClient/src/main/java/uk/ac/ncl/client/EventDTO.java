@@ -23,6 +23,7 @@ public class EventDTO implements Serializable {
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
+	private  String sequenceId;
 	private String originator;
 	private String responder;
 	private String type;
@@ -42,8 +43,9 @@ public class EventDTO implements Serializable {
 	 * @param status
 	 * @param id
 	 */
-	public EventDTO(String originator, String responder, String type, String status, String id) {
+	public EventDTO(String sequenceId, String originator, String responder, String type, String status, String id) {
 		super();
+		this.sequenceId = sequenceId;
 		this.originator = originator;
 		this.responder = responder;
 		this.type = type;
@@ -66,7 +68,7 @@ public class EventDTO implements Serializable {
 	/**
 	 * Sets the originator.
 	 *
-	 * @param origianator the new originator
+	 * @param originator the new originator
 	 */
 	public void setOriginator(String originator) {
 		this.originator = originator;
@@ -159,17 +161,24 @@ public class EventDTO implements Serializable {
 		this.id = id;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "EventDTO [" + (originator != null ? "originator=" + originator + ", " : "")
-				+ (responder != null ? "responder=" + responder + ", " : "")
-				+ (type != null ? "type=" + type + ", " : "") + (status != null ? "status=" + status + ", " : "")
-				+ (id != null ? "id=" + id : "") + "]";
+
+	public String getSequenceId() {
+		return sequenceId;
 	}
 
+	public void setSequenceId(String sequenceId) {
+		this.sequenceId = sequenceId;
+	}
 
-
+	@Override
+	public String toString() {
+		return "EventDTO{" +
+				"sequenceId='" + sequenceId + '\'' +
+				", originator='" + originator + '\'' +
+				", responder='" + responder + '\'' +
+				", type='" + type + '\'' +
+				", status='" + status + '\'' +
+				", id='" + id + '\'' +
+				'}';
+	}
 }

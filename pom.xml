@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <name>CCCRest-ear</name>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ncl.tests</groupId>
+    <artifactId>CCCRest-ear</artifactId>
+    <version>2.1.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <url>http://jboss.org/jbossas</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <distribution>repo</distribution>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+    <modules>
+        <module>CCCRest-ear-ejb</module>
+        <module>CCCRest-ear-commons</module>
+        <module>CCCRest-ear-web</module>
+        <module>CCCRest-ear-ear</module>
+    </modules>
+
+    <properties>
+
+        <drools.version>5.5.0.Final</drools.version>
+        <drools6.version>6.2.0.Final</drools6.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jboss.bom.version>1.0.0.M7</jboss.bom.version>
+        <version.jboss.maven.plugin>7.6.Final</version.jboss.maven.plugin>
+        <version.jboss.bom.eap>6.3.0.GA</version.jboss.bom.eap>
+
+        <version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>
+
+        <version.ear.plugin>2.8</version.ear.plugin>
+        <version.ejb.plugin>2.3</version.ejb.plugin>
+        <version.surefire.plugin>2.10</version.surefire.plugin>
+        <version.war.plugin>2.1.1</version.war.plugin>
+        <version.hornetq>2.3.19.Final</version.hornetq>
+        <version.hornetq.rest>2.3.19.Final</version.hornetq.rest>
+        <netty.version>3.6.9.Final-redhat-1</netty.version>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>uk.ac.ncl.tests</groupId>
+                <artifactId>CCCRest-ear-commons</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>uk.ac.ncl.tests</groupId>
+                <artifactId>CCCRest-ear-ejb</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
+
+            <dependency>
+                <groupId>uk.ac.ncl.tests</groupId>
+                <artifactId>CCCRest-ear-web</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-javaee-6.0-with-tools</artifactId>
+                <version>${jboss.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+                <version>${jboss.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Test dependencies -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.10</version>
+                <type>jar</type>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxrs</artifactId>
+                <version>2.3.3.Final</version>
+                <!--<version>2.2.0.GA</version> -->
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxb-provider</artifactId>
+                <version>2.3.3.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-web-6.0</artifactId>
+                <version>3.0.1.Final</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                <artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
+                <version>1.0.0.Final</version>
+                <type>pom</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>6.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-multipart-provider</artifactId>
+                <version>2.3.3.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jayway.restassured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>1.6.2</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kie-api</artifactId>
+                <version>${drools6.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-core</artifactId>
+                <version>${drools6.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-compiler</artifactId>
+                <version>${drools6.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-decisiontables</artifactId>
+                <version>${drools6.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-templates</artifactId>
+                <version>${drools6.version}</version>
+            </dependency>
+
+            <!-- log4j -->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.8</version>
+            </dependency>
+            <!-- joda-time -->
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>1.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>1.1.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.spec.javax.jms</groupId>
+                <artifactId>jboss-jms-api_1.1_spec</artifactId>
+                <version>1.0.1.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.naming</groupId>
+                <artifactId>jnpserver</artifactId>
+                <version>5.0.3.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hornetq.rest</groupId>
+                <artifactId>hornetq-rest</artifactId>
+                <version>${version.hornetq.rest}</version>
+
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.netty</groupId>
+                <artifactId>netty</artifactId>
+                <version>3.6.9.Final-redhat-1-4cc400c</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.ejb3</groupId>
+                <artifactId>jboss-ejb3-ext-api</artifactId>
+                <version>1.1.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-core-client</artifactId>
+                <version>${version.hornetq}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-jms-client</artifactId>
+                <version>${version.hornetq}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-ra</artifactId>
+                <version>${version.hornetq}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jboss.as.plugins</groupId>
+                    <artifactId>jboss-as-maven-plugin</artifactId>
+                    <version>${version.jboss.maven.plugin}</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <profiles>
+    <profile>
+<!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
+<!-- Use this profile for any OpenShift specific customization your app will need. -->
+<!-- By default that is to put the resulting archive into the 'deployments' folder. -->
+<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+         <id>openshift</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <artifactId>maven-ear-plugin</artifactId>
+                  <version>2.6</version>
+                  <configuration>
+                     <outputDirectory>deployments</outputDirectory>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+    </profiles>
+
+</project>

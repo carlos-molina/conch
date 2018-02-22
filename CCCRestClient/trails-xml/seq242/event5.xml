@@ -1,0 +1,7 @@
+<event>
+  <sequenceId>seq242</sequenceId>
+  <originator>buyer</originator>
+  <responder>store</responder>
+  <type>BUYCANC</type>
+  <status>success</status>
+</event>
