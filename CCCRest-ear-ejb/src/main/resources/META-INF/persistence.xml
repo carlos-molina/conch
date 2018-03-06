@@ -17,8 +17,8 @@
             <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1:3306/rope_historical"/>
             <property name="hibernate.connection.driver_class" value="org.mysql.jdbc.Driver"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-            <property name="hibernate.connection.password" value="Me!Uj4^w"/>
-            <property name="hibernate.connection.username" value="rope"/>
+            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.connection.username" value="root"/>
 
 
         </properties>
