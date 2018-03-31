@@ -13,6 +13,7 @@ import org.kie.api.builder.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.StatelessKieSession;
+import uk.ac.ncl.ethereum.BlockChainOperation;
 import uk.ac.ncl.logging.CCCLogger;
 import uk.ac.ncl.xml.CCCResponse;
 
@@ -105,6 +106,8 @@ public static void bootstrapRelevanceEngine(){
         BusinessOperation buyConfirm = new BusinessOperation("Buy Confirmation");
         BusinessOperation payment = new BusinessOperation("Payment");
         BusinessOperation cancelation = new BusinessOperation("Cancelation");
+        // blockchain operation
+        BlockChainOperation bcOperation = new BlockChainOperation("bcEvent");
 
         // BusinessOperation poAcceptance = new
         // BusinessOperation("Purchase Order Acceptance");
@@ -153,7 +156,10 @@ public static void bootstrapRelevanceEngine(){
         workingMem.setGlobal("buyReject", buyReject);
         workingMem.setGlobal("buyConfirm", buyConfirm);
         workingMem.setGlobal("cancelation", cancelation);
-//        workingMem.setGlobal("System.out", System.out);
+        // blockchain operation 
+        workingMem.setGlobal("bcOperation", bcOperation);
+
+//  workingMem.setGlobal("System.out", System.out);
         // workingMem.setGlobal("cccResponse", cccResponse);
 
         // workingMem.setGlobal("payment", payment);
