@@ -2,6 +2,8 @@ package BuyerStoreContractEx
 
 // Import Java classes for EROP support
 import uk.ac.ncl.erop.*;
+import uk.ac.ncl.ethereum.*;
+
 import  uk.ac.ncl.logging.CCCLogger;
 // Global variables (persistent objects passed from outside)
 global RelevanceEngine engine;
@@ -18,6 +20,8 @@ global BusinessOperation payment;
 global BusinessOperation buyConfirm
 global BusinessOperation buyReject;
 global BusinessOperation cancelation;
+
+global BlockChainOperation bcOperation;
 
 global Responder responder;
 
@@ -39,6 +43,8 @@ rule "Initialization"
 		System.out.println("* Initialization rule triggered ");
 		CCCLogger.logTrace("* Initialization rule triggered");
 //		responder.setContractCompliant(false);
+	System.out.println("CCC - Send ethereum send transaction event");
+		bcOperation.sendBCEvent("bcEvent");
 end
 
 /* Rule 1: having received a Buy Request event from the buyer, his right to submit another
