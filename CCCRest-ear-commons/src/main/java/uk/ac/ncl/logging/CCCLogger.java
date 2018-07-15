@@ -16,7 +16,7 @@ public class CCCLogger {
         logWarn("");
         logInfo("");
         logDebug("");
-        logTrace("");
+//        logTrace("");
     }
 
     public static void logFatal(String msg)
