@@ -29,8 +29,6 @@
                     </driver>
                 </drivers>`
 
-6. copy conch/JBOSS-EAP-6.4 configuration/drools to  jboss-eap-6.4/standalone/ to install default contract
-7. edit change-set.xml in  jboss-eap-6.4/standalone/drools/upload with full path to Rule.drl   
 8. `export JBOSS_HOME=<installation` path for jboss-eap-6.4>
 9. execute `conch/run.sh` script 
 10. check for any exceptions
