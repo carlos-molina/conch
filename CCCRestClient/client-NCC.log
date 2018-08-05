@@ -1,0 +1,120 @@
+folder: /Users/alpac/DEV/conch/CCCRestClient/dataseller-pmlExecSeq-xml/dataseller.pmlExecSeq3 
+
+filename: event1.xml
+
+BusinessEvent{sequenceId='null', originator='buyer', responder='store', type='BUYREQ', status='success'}
+-------- Begin Request to CCC service ----------
+
+BusinessEvent{sequenceId='null', originator='buyer', responder='store', type='BUYREQ', status='success'}
+
+-------- End Request to CCC service ----------
+
+-------- Begin Response from CCC service ----------
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<result>
+    <contractCompliant>true</contractCompliant>
+</result>
+
+-------- End Response from CCC service ----------
+
+folder: /Users/alpac/DEV/conch/CCCRestClient/dataseller-pmlExecSeq-xml/dataseller.pmlExecSeq3 
+
+filename: event2.xml
+
+BusinessEvent{sequenceId='null', originator='store', responder='buyer', type='BUYCONF', status='success'}
+-------- Begin Request to CCC service ----------
+
+BusinessEvent{sequenceId='null', originator='store', responder='buyer', type='BUYCONF', status='success'}
+
+
+-------- End Request to CCC service ----------
+
+
+-------- Begin Response from CCC service ----------
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<result>
+    <contractCompliant>true</contractCompliant>
+</result>
+
+
+-------- End Response from CCC service ----------
+
+
+folder: /Users/alpac/DEV/conch/CCCRestClient/dataseller-pmlExecSeq-xml/dataseller.pmlExecSeq3 
+
+filename: event3.xml
+
+BusinessEvent{sequenceId='null', originator='buyer', responder='store', type='BUYPAY', status='success'}
+-------- Begin Request to CCC service ----------
+
+BusinessEvent{sequenceId='null', originator='buyer', responder='store', type='BUYPAY', status='success'}
+
+
+-------- End Request to CCC service ----------
+
+
+
+-------- Begin Response from CCC service ----------
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<result>
+    <contractCompliant>true</contractCompliant>
+</result>
+
+
+-------- End Response from CCC service ----------
+
+
+
+folder: /Users/alpac/DEV/conch/CCCRestClient/dataseller-pmlExecSeq-xml/dataseller.pmlExecSeq3 
+
+filename: event4.xml
+
+BusinessEvent{sequenceId='null', originator='buyer', responder='store', type='GETVOU', status='success'}
+-------- Begin Request to CCC service ----------
+
+BusinessEvent{sequenceId='null', originator='buyer', responder='store', type='GETVOU', status='success'}
+
+
+-------- End Request to CCC service ----------
+
+
+
+-------- Begin Response from CCC service ----------
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<result>
+    <contractCompliant>false</contractCompliant>
+</result>
+
+
+-------- End Response from CCC service ----------
+
+
+
+folder: /Users/alpac/DEV/conch/CCCRestClient/dataseller-pmlExecSeq-xml/dataseller.pmlExecSeq3 
+
+filename: event6.xml
+
+BusinessEvent{sequenceId='null', originator='reset', responder='reset', type='reset', status='reset'}
+-------- Begin Request to CCC service ----------
+
+BusinessEvent{sequenceId='null', originator='reset', responder='reset', type='reset', status='reset'}
+
+
+-------- End Request to CCC service ----------
+
+
+
+-------- Begin Response from CCC service ----------
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<result>
+    <contractCompliant>true</contractCompliant>
+</result>
+
+
+-------- End Response from CCC service ----------
+
