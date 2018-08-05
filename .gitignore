@@ -11,3 +11,9 @@
 /CCCRest-ear-ejb/CCCRest-ear-ejb.iml
 /CCCRest-ear-ejb/target
 /CCCRest-ear-web/CCCRest-ear-web.iml
+/solidity-contracts/strings.bin
+/solidity-contracts/strings.abi
+/solidity-contracts/collectPayment.bin
+/solidity-contracts/collectPayment.abi
+/CCCRestClient/texput.log
+/CCCRestClient/texput.fls
