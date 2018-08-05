@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 import org.drools.compiler.compiler.DroolsParserException;
 import org.kie.api.KieServices;
-import org.kie.api.builder.KieBuilder;
-import org.kie.api.builder.Results;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import uk.ac.ncl.ethereum.BlockChainOperation;
@@ -34,50 +32,28 @@ public class RelevanceEngine {
   // default response is non contract compliant otherwise contract compliant
   private static CCCResponse cccResponse = new CCCResponse("", false);
   private static CCCLogger ccclog;
-//    private static CCCLogger ccclog;
 
-  /**
-   * Handle compilation errors.
-   *
-   * @param builder the builder
-   * @param fileName the file name
-   */
-  private static void handleCompilationErrors(KieBuilder builder, String fileName) {
-    Results builderErrors = builder.getResults();
-    String[] errorMsg = new String[builderErrors.getMessages().size() + 1];
-    errorMsg[0] = new String("Compilation errors for file " + fileName);
-    for (int i = 0; i < builderErrors.getMessages().size(); i++) {
-      errorMsg[i + 1] = builderErrors.getMessages().iterator().next().getText();
-    }
-    ErrorMessageManager.fatalErrorMsg(errorMsg);
-  }
 
   /**
    * Instantiates a new relevance engine.
    *
-   * @param fileName the file name  of the changeset
    * @param el the event logger
    * @throws IOException Signals that an I/O exception has occurred.
    * @throws DroolsParserException the drools parser exception
    */
-  public RelevanceEngine(String fileName, EventLogger el)
-      throws IOException, DroolsParserException {
+  public RelevanceEngine(EventLogger el) {
+
     // Verify that the EventLogger is not null
     if (el == null) {
       throw new IllegalArgumentException("EventLogger ref null");
     }
-    /* TODO refactor method to use the new kie packages */
-    KieServices ks = KieServices.Factory.get();
 
+    KieServices ks = KieServices.Factory.get();
     KieContainer ruleBase = ks.getKieClasspathContainer();
 //        workingMem = ruleBase.newStatelessKieSession("CCCKS");
     workingMem = ruleBase.newKieSession("CCCKS");
     eventLogger = el;
 
-  }
-
-  public static void bootstrapRelevanceEngine() {
-    //InputStream schemaIS = getClassLoader().getResourceAsStream("META-INF/kcontract.xml");
   }
 
   /**
