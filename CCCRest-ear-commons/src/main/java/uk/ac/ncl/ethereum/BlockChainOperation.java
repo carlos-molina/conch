@@ -1,30 +1,37 @@
 package uk.ac.ncl.ethereum;
 
+import static org.web3j.tx.gas.DefaultGasProvider.GAS_LIMIT;
+import static org.web3j.tx.gas.DefaultGasProvider.GAS_PRICE;
+
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Properties;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import uk.ac.ncl.erop.BusinessOperation;
 import uk.ac.ncl.ethereum.contract.CollectPayment;
-import uk.ac.ncl.ethereum.contract.CollectPaymentFull;
 import uk.ac.ncl.logging.CCCLogger;
+import uk.ac.ncl.properties.CCCProperties;
 
 /**
- * Experimental code for CCC-blockchain integration
+ * Experimental code for CCC and Ethereum integration
  */
 public class BlockChainOperation extends BusinessOperation {
+
+  private String paymentResult;
+  private String name;
   /**
    * Instantiates a new blockchain operation.
    *
    * @param name the name
    */
   private BlockChainEvent bcEvent;
-  private CollectPayment collectPayment;
   private Web3j web3j;
   private Credentials credentials;
-  private CollectPaymentFull contract;
+  private static CollectPayment contract;
+  private Properties properties;
+  private String contractAddress;
 
   /**
    * Instantiates a new Block chain operation.
@@ -33,6 +40,7 @@ public class BlockChainOperation extends BusinessOperation {
    */
   public BlockChainOperation(String name) {
     super(name);
+    this.name = name;
   }
 
   /**
@@ -42,46 +50,48 @@ public class BlockChainOperation extends BusinessOperation {
    * @throws CipherException the cipher exception
    */
   public void init() throws IOException, CipherException {
+    loadConfiguration();
+    contractAddress = properties.getProperty("contractAddress");
+    String keyStorePath = properties.getProperty("keyStoreFilePath");
+    CCCLogger.logInfo("keyStorePath: " + keyStorePath);
+    String walletPSW = properties.getProperty("accountPassword");
+
     CCCLogger.logInfo("-- initialize BlockChain Event --");
     bcEvent = new BlockChainEvent();
+
     CCCLogger.logInfo("-- initialize Web3 client --");
-    web3j = bcEvent.initWeb3();
+    web3j = bcEvent.initWeb3(keyStorePath, walletPSW);
+
     CCCLogger.logInfo("-- getWeb3ClientVersion --" + bcEvent.getWeb3ClientVerion());
+
     CCCLogger.logInfo("-- getCredentials --");
     credentials = bcEvent.getCredentials();
-    /** TODO add contract address */
-    String contractAddress = "0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-    /** TODO add gas price and gasLimit */
-    BigInteger gasPrice = new BigInteger("1");
-    BigInteger gasLimit = new BigInteger("321635");
-
-    contract = CollectPaymentFull
-        .load(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    // load contract
+    contract = CollectPayment.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
   }
 
-  /**
-   * Send sample blockchain events.
-   *
-   * @param name of the event
-   * @throws Exception the exception
-   */
-  public void sendBCEvent(String name) throws Exception {
-    // TODO add address to send ether to
-    TransactionReceipt transactionReceipt = bcEvent.sendEther("0xaddress");
-    CCCLogger.logInfo("transaction: " + transactionReceipt);
+  private void loadConfiguration() {
+    CCCLogger.logInfo("load ethereum properties");
+    CCCProperties cccProperties = new CCCProperties();
+    cccProperties.loadProperties();
+    properties = cccProperties.getProperties();
   }
+
 
   /**
    * Submits a payment for the CollectPayment smart contract deployed on Ethereum.
    *
    * @throws Exception the exception
    */
-  public void submitPayment() throws Exception {
+  public void submitPayment() {
     CCCLogger.logInfo("submit payment for contract: ");
     BigInteger amountToPay = BigInteger.TEN;
-    String payment = contract.submitPayment(amountToPay).send();
-    CCCLogger.logInfo("payment: " + payment);
+    try {
+      paymentResult = contract.submitPayment(amountToPay).send();
+    } catch (Exception e) {
+      CCCLogger.logError("payment error Result: " + e.getMessage());
+    }
   }
 
   /**
@@ -95,4 +105,5 @@ public class BlockChainOperation extends BusinessOperation {
     String receipt = contract.getReceipt(transactionNo).send();
     CCCLogger.logInfo("receipt: " + receipt);
   }
+
 }
