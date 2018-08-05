@@ -92,13 +92,6 @@ public class RelevanceEngine {
     workingMem.setGlobal("logger", eventLogger);
     /* TODO: Doing this manually here now, but a proper loader needs to be  written! */
     /* TODO: load dynamic properties of an electronic contract -> a bootstrap mechanism */
-    //
-
-    // BusinessOperation buyAcceptance = new
-    // BusinessOperation("Buy Acceptance");
-
-    // BusinessOperation finePayment = new
-    // BusinessOperation("Fine Payment");
 
     BusinessOperation buyRequest = new BusinessOperation("Buy Request");
     BusinessOperation buyReject = new BusinessOperation("Buy Request Rejection");
@@ -107,20 +100,9 @@ public class RelevanceEngine {
     BusinessOperation cancelation = new BusinessOperation("Cancelation");
     log.info("initialize blockchain operations");
     BlockChainOperation voucher = new BlockChainOperation("Get Voucher");
-//    BlockChainOperation paymentOnChain = new BlockChainOperation("Payment On Chain");
     BlockChainOperation bcEvent = new BlockChainOperation("Payment On Chain");
-
-    // BusinessOperation poAcceptance = new
-    // BusinessOperation("Purchase Order Acceptance");
-    // BusinessOperation poRejection = new
-    // BusinessOperation("Purchase Order Acceptance");
-    // BusinessOperation goodsDelivery = new
-    // BusinessOperation("Goods Delivery");
-    // BusinessOperation anyOperation = new
-    // BusinessOperation("Any Operation");
     RolePlayer buyer = new RolePlayer("buyer");
     RolePlayer seller = new RolePlayer("seller");
-    // RolePlayer player = new RolePlayer("player");
     // Create and pass the timing monitor
     if (performanceTestingOn) {
       TimingMonitor tm = new TimingMonitor();
@@ -132,21 +114,6 @@ public class RelevanceEngine {
     ROPSet ropBuyer = new ROPSet(new RolePlayer("buyer"));
     ROPSet ropSeller = new ROPSet(new RolePlayer("seller"));
 
-//		Boolean buyReqBF = false;
-
-//		Boolean buyRejBF = false;
-//		Boolean buyConfBF = false;
-//		Boolean buyPayBF = false;
-// 		Boolean buyCancBF = false;
-//		// ROPSet ropPlayer = new ROPSet(player);
-//		// Add all the globals to the working memory
-//
-//		workingMem.setGlobal("buyReqBF", buyReqBF);
-//		workingMem.setGlobal("buyConfBF", buyConfBF);
-//		workingMem.setGlobal("buyPayBF", buyPayBF);
-//		workingMem.setGlobal("buyCancBF", buyCancBF);
-//		workingMem.setGlobal("buyRejBF", buyRejBF);
-
     workingMem.setGlobal("buyer", buyer);
     workingMem.setGlobal("seller", seller);
     workingMem.setGlobal("ropBuyer", ropBuyer);
@@ -157,21 +124,7 @@ public class RelevanceEngine {
     workingMem.setGlobal("buyConfirm", buyConfirm);
     workingMem.setGlobal("cancelation", cancelation);
     workingMem.setGlobal("voucher", voucher);
-//    workingMem.setGlobal("paymentOnChain", paymentOnChain);
     workingMem.setGlobal("bcEvent", bcEvent);
-//  workingMem.setGlobal("System.out", System.out);
-    // workingMem.setGlobal("cccResponse", cccResponse);
-
-    // workingMem.setGlobal("payment", payment);
-    // workingMem.setGlobal("poAcceptance", poAcceptance);
-    // workingMem.setGlobal("poRejection", poRejection);
-    // workingMem.setGlobal("goodsDelivery", goodsDelivery);
-
-    // Load globals for performance testing
-    // workingMem.setGlobal("player", player);
-    // workingMem.setGlobal("ropPlayer", ropPlayer);
-    // workingMem.setGlobal("anyOperation", anyOperation);
-    // Complete
 
     responder = new Responder("", false);
     workingMem.setGlobal("responder", responder);
