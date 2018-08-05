@@ -19,12 +19,11 @@ public class ContractComplianceChecker {
   /**
    * Creates a new Contract Compliance Checker If a CCC is created return the current instance
    *
-   * @param filepath the filepath
    * @return the CCC instance
    */
-  public static ContractComplianceChecker createContractComplianceChecker(String filepath) {
+  public static ContractComplianceChecker createContractComplianceChecker() {
     if (instance == null) {
-      instance = new ContractComplianceChecker(filepath);
+      instance = new ContractComplianceChecker();
       return instance;
     } else {
       return instance;
@@ -51,18 +50,16 @@ public class ContractComplianceChecker {
   /**
    * Instantiates a new Contract Compliance Checker
    *
-   * @param filepath the filepath
    */
-  private ContractComplianceChecker(String filepath) {
+  private ContractComplianceChecker() {
 
     log.info("Initializing objects...");
-    log.info("filepath: " + filepath);
 
     logger = new EventLogger();
 
     // NOTE: It might fail to find the file
     try {
-      relevanceEngine = new RelevanceEngine(filepath, logger);
+      relevanceEngine = new RelevanceEngine( logger);
     } catch (Exception e) {
       ErrorMessageManager.fatalErrorMsg("Failed to initalize Relevance Engine", e);
     }

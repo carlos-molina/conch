@@ -28,7 +28,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
-import uk.ac.ncl.conf.ConfigurationFilesEnum;
 import uk.ac.ncl.erop.ContractComplianceChecker;
 import uk.ac.ncl.erop.Event;
 import uk.ac.ncl.logging.CCCLogger;
@@ -77,8 +76,7 @@ public class EventsMDB implements MessageListener {
         bEvent = receiveBusinessEventMsg((BytesMessage) rcvMessage);
         //bEvent = Jms.getEntity(rcvMessage, BusinessEvent.class);
 
-        ccc = ContractComplianceChecker.createContractComplianceChecker(
-            ConfigurationFilesEnum.BUYER_STORE_CONTRACT.getConfigurationFilePath());
+        ccc = ContractComplianceChecker.createContractComplianceChecker();
 
         Event event;
         List<CCCResponse> responses;
