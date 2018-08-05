@@ -12,6 +12,7 @@ class BlockChainOperationTest {
     log.info("send Contract event: ");
     BlockChainOperation blockChainOperation = new BlockChainOperation("blockchain");
     blockChainOperation.init();
-    blockChainOperation.sendContractEvent();
+    blockChainOperation.submitPayment();
+    blockChainOperation.getVoucher();
   }
 }
