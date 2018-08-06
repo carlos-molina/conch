@@ -1,6 +1,6 @@
 ## conch
-
-conch (Contract Checker) is a tool
+conch (Contract Checker) is the repository that
+hosts the Contract Compliance Checkert (CCC) tool
 that we have implemented for monitoring
 and enforcing executable contracts
 at run time.
