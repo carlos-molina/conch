@@ -18,7 +18,7 @@ and enforcing smart contracts at run time.
   [Implementation of Smart Contracts Using Hybrid Architectures with 
    On- and Off-Blockchain Components](https://arxiv.org/pdf/1808.00093.pdf 
   "implementation paper")) technical report.
-  
+     
 
 #### Smart contracts
 An executable contract (also called a smart contract) 
