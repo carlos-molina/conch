@@ -1,9 +1,22 @@
 ## conch
-conch (Contract Checker) is the repository that
-hosts the Contract Compliance Checkert (CCC) tool
-that we have implemented for monitoring
-and enforcing executable contracts
-at run time.
+conch is the repository that hosts the Contract Compliance 
+Checkert (CCC) tool that we have implemented for monitoring
+and smart contracts at run time.
+
+* The CCC hosted in this chonch repository can be deployed as a web server
+  on a Trusted Third Party, thus it is a **centralised**, that is,
+  an **off blockchain** smart contract enforcer.
+
+* A smart contract enforcer that follows a **hybrid approach**
+  where the CCC plays the role of the off blockchain
+  component is hosted in the 
+  [TECOmate repository](https://github.com/carlos-molina/TECOmate)
+  and discussed in the
+  [Implementation of Smart Contracts Using Hybrid Architectures with 
+   On- and Off-Blockchain Components](https://arxiv.org/pdf/1808.00093.pdf 
+  "implementation paper")) technical report.
+
+
 
 #### Smart contracts
 An executable contract (also called a smart contract) 
