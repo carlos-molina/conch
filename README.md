@@ -48,8 +48,8 @@ rely on blockchain.
 
 
 # Installation
-The installation procedure is detailed in [UsersGuide1.2.pdf]
-(./UsersGuide1.2.pdf).
+The installation procedure is detailed 
+in [UsersGuide1.2.pdf](UsersGuide1.2.pdf).
 
 
 # Contributors
