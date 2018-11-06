@@ -17,7 +17,11 @@ and enforcing smart contracts at run time.
   and discussed in the
   [Implementation of Smart Contracts Using Hybrid Architectures with 
    On- and Off-Blockchain Components](https://arxiv.org/pdf/1808.00093.pdf 
-  "implementation paper")) technical report.
+  "implementation paper")) technical report. The reader might
+  like also to have a look at the 
+  [contraval repository](https://github.com/carlos-molina/contraval)
+  which hosts a contract validator tool that complements each other
+  with conch.
      
 
 #### Smart contracts
