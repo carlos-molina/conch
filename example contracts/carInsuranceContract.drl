@@ -1,0 +1,169 @@
+/*
+ * Programmer:   Carlos Molina-Jimenez, Computer Laboratory
+ *                                      University of Cambridge.
+ *               Carlos.Molina@cl.cam.ac.uk
+ * Date:         5 Mar 2019
+ *  
+ * Program name: carInsuranceContract.drl
+ *               This program is written in drools language and
+ *               encodes a smart contract used by a car insurance
+ *               seller for selling insurance policies to customers.
+ *               All the operations are monitored and enforced by
+ *               a this carInsuranceContract.drl contract deployed on 
+ *               the Contract Compliance Checker (CCC).
+ * Execution:    The CCC is deployed on a Trusted Third Party (TTP)
+ *               as explained in the document "Smart Contracts Deployed 
+ *               on Trusted Third Parties are not a Bad Idea".
+ *
+ * Contributors: Ioannis Sfyrakis, University of Newcastle.
+ *               Ioannis.Sfyrakis@ncl.ac.uk
+ *
+ */
+
+
+package carInsuranceContract
+
+# Import Java classes for EROP support
+import uk.ac.ncl.erop.*;
+
+# Global variables (persistent objects passed from outside)
+global RelevanceEngine engine;
+global EventLogger logger;
+
+#buyer:  a customer (Alice) interested in buying an
+#        insurance policy
+#seller: a seller (Bob) of insurance policies
+global RolePlayer buyer;
+global RolePlayer seller;
+
+# buyer's set with Rights, Obligations and Prohibitions
+global ROPSet ropBuyer;
+# seller's set with Rights, Obligations and Prohibitions
+global ROPSet ropSeller;
+global TimingMonitor timingMonitor;
+
+# definition of valid contractual operations.
+# PO stands for purchase order request to buy
+# an insurance policy
+global BusinessOperation POrequest;
+global BusinessOperation payment;
+global BusinessOperation POconfirm
+global BusinessOperation POreject;
+global BusinessOperation cancellation;
+
+# the events POREQ, POREJ, POCONF and POPAY
+# are events that the smart contract receives
+# from the external entities (eg, the buyer)
+# upon the execution of business operations.
+
+global Responder responder;
+
+
+
+# Rule 0: 
+#       handles initialization of the ROP sets of
+#       the buyer and seller.
+# It is launched only when the contract is set up.
+# The buyer starts with the right to submit a PO 
+# request.
+rule "Initialization"
+  when
+    $e: Event (type == "init")
+  then
+    System.out.println("* Initialization when");
+    # Grant a right to submit a PO to the buyer
+    ropBuyer.addRight(buyRequest, seller, (String)null);
+    System.out.println("* Initialization rule triggered ");
+    #responder.setContractCompliant(false);
+end
+
+
+
+# Rule 1: 
+#      handles the buyer's right to submit a PO request.
+# It accepts the PO, removes the right to submit
+# a PO and assigns the obligation to the seller to
+# accept or reject the PO request.
+rule "PO Request Received"
+ when
+   # Verify type of event, originator, and responder
+   $e: Event(type=="POREQ", originator=="buyer", 
+        responder=="seller", status=="success")
+        eval(ropBuyer.matchesRights(POrequest))
+ then
+    # Remove buyer's right to place another PO Requests
+    ropBuyer.removeRight(POrequest, seller);
+    # Add an obligation to either accept or reject PO to the seller
+    BusinessOperation[] bos = {POconfirm, POreject};
+    ropSeller.addObligation("React To PO Request", bos, buyer, 60,2);
+    System.out.println("* PO Request Received rule triggered");
+    responder.setContractCompliant(true);
+end
+
+
+
+# Rule 2: 
+#      handles seller's obligation to reject the PO.
+# The seller has an obligation to respond to a 
+# PO request submitted by the buyer, with either
+# accept or reject. This rule handles rejection.
+rule "PO Request Rejection"
+ when
+    $e: Event(type=="POREJ", originator=="seller", responder=="buyer", status=="success")
+    eval(ropSeller.matchesObligations("React to PO request"));
+ then
+    System.out.println("* PO Rejection");
+    # Seller's obligation to respond is satisfied, remove it
+    ropSeller.removeObligation("React to PO Request", buyer);
+    System.out.println("* PO Request Rejection triggered");
+    responder.setContractCompliant(true);
+end
+
+
+# Rule 3: 
+#      handles seller's obligation to accept the PO.
+# The seller has an obligation to respond to a 
+# PO request submitted by the buyer, with either
+# accept or reject. This rule handles acceptance.
+# It assigns the buyer an obligation to pay the 
+# seller.
+rule "PO Request Confirmation"
+ when
+    $e: Event(type=="POCONF", originator=="seller", responder=="buyer", status=="success")
+        eval(ropSeller.matchesObligations("React to PO Request"));
+ then
+    # Seller's obligation to respond is satisfied, remove it
+    ropSeller.removeObligation("React to PO Request", buyer);
+    # Add an obligation to the buyer to pay within date!
+    # 60 seconds, 2 min, 1 hour
+    ropBuyer.addObligation(payment, seller, 60, 2, 1);
+    ropBuyer.addRight(cancelation, seller, 60, 2, 1);
+    System.out.println("* PO Request Confirmation rule triggered");
+    responder.setContractCompliant(true);
+end
+
+
+
+# Rule 4:
+#      handles buyer's obligation to pay 
+rule "Payment Received"
+ when
+    $e: Event(type=="POPAY", originator=="buyer", responder=="store", status=="success")
+        eval(ropBuyer.matchesObligations(payment))
+ then
+    # Buyer's obligation is satiasfied, remove it.
+    ropBuyer.removeObligation(payment, seller);
+    ropBuyer.removeRight(cancellation, seller);
+    System.out.println("* Payment Received rule triggered");
+    responder.setContractCompliant(true); 
+
+
+
+# Rule 5:
+# Theset of rules listed above is not complete yet. 
+# Rules for handling more operations (e.g., delivery,
+# cancellation, etc) and situations (the execution
+# of an operation such as POPAY fails to complete
+# successfully).
+#
+
