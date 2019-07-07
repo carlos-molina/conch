@@ -1,0 +1,157 @@
+package BuyerStoreContractEx
+
+// Import Java classes for EROP support
+import uk.ac.ncl.erop.*;
+
+// Import Blockchain related classes
+import uk.ac.ncl.ethereum.*;
+
+import  uk.ac.ncl.logging.CCCLogger;
+// Global variables (persistent objects passed from outside)
+global RelevanceEngine engine;
+global EventLogger logger;
+global RolePlayer buyer;
+global RolePlayer seller;
+global ROPSet ropBuyer;
+global ROPSet ropSeller;
+global TimingMonitor timingMonitor;
+global BusinessOperation buyRequest;
+global BusinessOperation payment;
+global BusinessOperation buyConfirm
+global BusinessOperation buyReject;
+global BusinessOperation cancelation;
+global BlockChainOperation voucher;
+global BlockChainOperation bcEvent;
+global Responder responder;
+
+global CCCLogger cccloger;
+
+/* Rule 0: initialize the ROP sets for buyer and seller.
+* This rule is launched only when the contract is set up.
+* the buyer
+* starts with the right to submit a buy request.  */
+
+rule "Initialization"
+	when
+		$e: Event (type == "init")
+	then
+		CCCLogger.logTrace("* Initialization when");
+		// Add buyer's right to submit an order
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+		CCCLogger.logTrace("* Initialization rule triggered ");
+		CCCLogger.logTrace("Initialize contract");
+		bcEvent.init();
+end
+
+/* Rule 1: having received a Buy Request event from the buyer, his right to submit another
+* is temporarily revoked until the current one is completed. The seller gains
+* an obligation to either accept or reject the Buy Request. */
+rule "Buy Request Received"
+	when
+//		 Verify type of event, originator, and responder
+		$e: Event(type=="BUYREQ", originator=="buyer", responder=="store", status=="success")
+		eval(ropBuyer.matchesRights(buyRequest))
+	then
+//		 Remove buyer's right to place other Buy Requests
+		ropBuyer.removeRight(buyRequest, seller);
+//		 Add seller's obligation to either accept or reject order
+		BusinessOperation[] bos = {buyConfirm, buyReject};
+		ropSeller.addObligation("React To Buy Request", bos, buyer, 0,0,72); // 3 days
+		CCCLogger.logTrace("* Buy Request Received rule triggered");
+		responder.setContractCompliant(true);
+end
+
+
+/* Rule 2: having received a reject Buy Request event from the seller, the pending obligation
+* is satisfied. Restore buyer's right to submit Buy Requests.
+*/
+rule "Buy Request Rejected"
+	when
+		$e: Event(type=="BUYREJ", originator=="store", responder=="buyer", status=="success")
+		eval(ropSeller.matchesObligations("React To Buy Request"));
+	then
+		CCCLogger.logTrace("* Buy Rejection");
+		// Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Buy Request", buyer);
+		// Restore buyer's right to submit other Buy Requests
+		//ropBuyer.addRight(buyRequest, seller, (String)null);
+		CCCLogger.logTrace("* Buy Request Rejected rule triggered");
+		responder.setContractCompliant(true);
+end
+
+/* Rule 3: having received an accept Buy Request event from the seller, the pending obligation
+* is satisfied. New obligation on buyer to pay seller.
+*/
+rule "Buy Request Confirmation"
+	when
+		$e: Event(type=="BUYCONF", originator=="store", responder=="buyer", status=="success")
+		eval(ropSeller.matchesObligations("React To Buy Request"));
+	then
+		// Buyer's Obligation is satisfied, remove it
+		ropSeller.removeObligation("React To Buy Request", buyer);
+		// Add new obligation for buyer to pay a bill to the seller within date!
+		ropBuyer.addObligation(payment, seller, 0, 0, 72);  // 3 days
+		ropBuyer.addRight(cancelation, seller, 0, 0, 72);   // 3 days
+		CCCLogger.logTrace("* Buy Request Confirmation rule triggered");
+		responder.setContractCompliant(true);
+end
+
+// Rule 5: Buyer pays. Obligation is satisfied. The buyer submits on-chain payment and adds right
+// to get a voucher if payment is successful.
+rule "Payment Received"
+	when
+		$e: Event(type=="BUYPAY", originator=="buyer", responder=="store", status=="success")
+		eval(ropBuyer.matchesObligations(payment))
+	then
+		// Buyer's Obligation is satisfied, remove it.
+		ropBuyer.removeObligation(payment, seller);
+		ropBuyer.removeRight(cancelation, seller);
+		
+    bcEvent.submitPayment();
+    ropBuyer.addRight(voucher, seller, 0, 0,  120); // 5 days
+    CCCLogger.logTrace("* Payment result received - add right to GetVoucher ");
+		CCCLogger.logTrace("* Payment rule triggered");
+		responder.setContractCompliant(true);
+end
+
+rule "Buy cancelation"
+	when
+		$e: Event(type=="BUYCANC", originator=="buyer", responder=="store", status=="success")
+		eval(ropBuyer.matchesRights(cancelation))
+	then
+		// Buyer's Obligation is satisfied, remove it.
+		ropBuyer.removeRight(cancelation, seller);
+		ropBuyer.removeObligation(payment, seller);
+
+		CCCLogger.logTrace("matches right cancellation: " + ropBuyer.toString());
+		CCCLogger.logTrace("* Buy cancellation rule triggered");
+		responder.setContractCompliant(true);
+end
+
+//  Buyer has the right to claim a voucher from the store, within 5 days of submitting payment.
+rule "Get Voucher"
+	when
+		$e: Event(type=="GETVOU", originator=="buyer", responder=="store", status=="success")
+		eval(ropBuyer.matchesRights(voucher))
+	then
+		ropBuyer.removeRight(bcEvent, seller);
+		bcEvent.getVoucher();
+		CCCLogger.logTrace("* Get Voucher rule triggered");
+		responder.setContractCompliant(true);
+end
+
+// Rule: Reset state of CCC after last message of sequence
+rule "Reset"
+	when
+		$e: Event(type=="reset")
+		eval(!ropBuyer.matchesRights(cancelation))
+	then
+		CCCLogger.logTrace("* reset when");
+		ropBuyer.reset();
+		ropSeller.reset();
+
+		// Add buyer's right to submit an order
+		ropBuyer.addRight(buyRequest, seller, (String)null);
+    CCCLogger.logTrace("* Reset rule triggered");
+		responder.setContractCompliant(true);
+end

@@ -40,7 +40,7 @@ public class UploadFileService {
 	@Context
 	UriInfo uriInfo;
 
-    private final String uploadDir = ConfigurationFilesEnum.SIMPLE_CONTRACT.getRulesFolderPath();
+    private final String uploadDir = ConfigurationFilesEnum.CONTRACTS_PATH.getRulesFolderPath();
 
     /**
 	 * Upload file.

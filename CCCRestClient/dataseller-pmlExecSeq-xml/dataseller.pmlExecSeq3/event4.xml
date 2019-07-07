@@ -1,0 +1,6 @@
+<event>
+  <originator>buyer</originator>
+  <responder>store</responder>
+  <type>GETVOU</type>
+  <status>success</status>
+</event>

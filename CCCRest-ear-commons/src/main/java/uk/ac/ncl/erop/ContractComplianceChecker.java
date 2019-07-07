@@ -4,135 +4,129 @@
 package uk.ac.ncl.erop;
 
 import java.util.List;
-
 import org.jboss.logging.Logger;
-
 import uk.ac.ncl.xml.CCCResponse;
 
 /**
  * The Class ContractComplianceChecker.
- *
  */
 public class ContractComplianceChecker {
 
-	private static ContractComplianceChecker instance = null;
+  private static ContractComplianceChecker instance = null;
 
-	private final static Logger log = Logger.getLogger(ContractComplianceChecker.class.toString());
+  private final static Logger log = Logger.getLogger(ContractComplianceChecker.class.toString());
 
-	/**
-	 * Creates a new Contract Compliance Checker
-	 * If a CCC is created return the current instance
-     *
-	 * @param filepath
-	 *            the filepath
-	 * @return the CCC instance
-	 */
-	public static ContractComplianceChecker createContractComplianceChecker(String filepath) {
-		if (instance == null) {
-			instance = new ContractComplianceChecker(filepath);
-			return instance;
-		} else {
-			return instance;
-		}
+  /**
+   * Creates a new Contract Compliance Checker If a CCC is created return the current instance
+   *
+   * @return the CCC instance
+   */
+  public static ContractComplianceChecker createContractComplianceChecker() {
+    if (instance == null) {
+      instance = new ContractComplianceChecker();
+      return instance;
+    } else {
+      return instance;
+    }
 
-	}
+  }
 
-	private static Boolean startFlag = false;
-	/** The time keeper. */
-	private TimeKeeper timeKeeper = null;
+  private static Boolean startFlag = false;
+  /**
+   * The time keeper.
+   */
+  private TimeKeeper timeKeeper = null;
 
-	/** The relevance engine. */
-	private RelevanceEngine relevanceEngine = null;
+  /**
+   * The relevance engine.
+   */
+  private RelevanceEngine relevanceEngine = null;
 
-	/** The logger. */
-	private EventLogger logger = null;
+  /**
+   * The logger.
+   */
+  private EventLogger logger = null;
 
-	/**
-	 * Instantiates a new Contract Compliance Checker
-	 *
-	 * @param filepath
-	 *            the filepath
-	 */
-	private ContractComplianceChecker(String filepath) {
+  /**
+   * Instantiates a new Contract Compliance Checker
+   *
+   */
+  private ContractComplianceChecker() {
 
-		log.info("Initializing objects...");
-        log.info("filepath: " +filepath);
+    log.info("Initializing objects...");
 
-		logger = new EventLogger();
+    logger = new EventLogger();
 
-		// NOTE: It might fail to find the file
-		try {
-			relevanceEngine = new RelevanceEngine(filepath, logger);
-		} catch (Exception e) {
-			ErrorMessageManager.fatalErrorMsg("Failed to initalize Relevance Engine", e);
-		}
-		try {
-			timeKeeper = new TimeKeeper(relevanceEngine, logger);
-		} catch (Exception e) {
-			ErrorMessageManager.fatalErrorMsg("Failed to initalize Time Keeper", e);
-		}
-	}
-
+    // NOTE: It might fail to find the file
+    try {
+      relevanceEngine = new RelevanceEngine( logger);
+    } catch (Exception e) {
+      ErrorMessageManager.fatalErrorMsg("Failed to initalize Relevance Engine", e);
+    }
+    try {
+      timeKeeper = new TimeKeeper(relevanceEngine, logger);
+    } catch (Exception e) {
+      ErrorMessageManager.fatalErrorMsg("Failed to initalize Time Keeper", e);
+    }
+  }
 
 
-	/**
-	 * Loop over an array of pre-created events and feed them to the RE and EL
-	 * // TODO: More sophisticated time management
-	 *
-	 * Start simulation.
-	 *
-	 * @param events
-	 *            the events
-	 */
-	public void startSimulation(List<Event> events) {
-		// Have the Relevance Engine do all the initialization bits
-		relevanceEngine.initializeContract(timeKeeper);
-		// Init event created and submitted
-		Event event = new Event("none","none", "none", "init", "success");
-		logger.logEvent(event);
-		relevanceEngine.addEvent(event);
-		startFlag = true;
-		// Continue with rest of simulation
-		continueSimulation(events);
-	}
+  /**
+   * Loop over an array of pre-created events and feed them to the RE and EL // TODO: More
+   * sophisticated time management
+   *
+   * Start simulation.
+   *
+   * @param events the events
+   */
+  public void startSimulation(List<Event> events) {
+    // Have the Relevance Engine do all the initialization bits
+    relevanceEngine.initializeContract(timeKeeper);
+    // Init event created and submitted
+    Event event = new Event("none", "none", "none", "init", "success");
+    logger.logEvent(event);
+    relevanceEngine.addEvent(event);
+    startFlag = true;
+    // Continue with rest of simulation
+    continueSimulation(events);
+  }
 
-	/**
-	 * Initialize ccc.
-	 */
-	public void initializeCCC() {
+  /**
+   * Initialize ccc.
+   */
+  public void initializeCCC() {
 
-		// Have the Relevance Engine do all the initialization bits
-		relevanceEngine.initializeContract(timeKeeper);
-		// Init event created and submitted
-		Event event = new Event("none","none", "none", "init", "success");
-		//logger.logEvent(event);
-		relevanceEngine.addEvent(event);
-		startFlag = true;
+    // Have the Relevance Engine do all the initialization bits
+    relevanceEngine.initializeContract(timeKeeper);
+    // Init event created and submitted
+    Event event = new Event("none", "none", "none", "init", "success");
+    //logger.logEvent(event);
+    relevanceEngine.addEvent(event);
+    startFlag = true;
 
-	}
+  }
 
-	/**
-	 * Simulation started.
-	 *
-	 * @return the boolean
-	 */
-	public Boolean cccStarted() {
+  /**
+   * Simulation started.
+   *
+   * @return the boolean
+   */
+  public Boolean cccStarted() {
 
-		return startFlag;
-	}
+    return startFlag;
+  }
 
-	/**
-	 * Continue simulation.
-	 *
-	 * @param events
-	 *            the events
-	 */
+  /**
+   * Continue simulation.
+   *
+   * @param events the events
+   */
 
-	public List<CCCResponse> continueSimulation(List<Event> events) {
-		List<CCCResponse> response = null;
-		// Feed events to RE
-		for (Event event : events) {
-			// Pause for 4.2 seconds whenever a null comes up
+  public List<CCCResponse> continueSimulation(List<Event> events) {
+    List<CCCResponse> response = null;
+    // Feed events to RE
+    for (Event event : events) {
+      // Pause for 4.2 seconds whenever a null comes up
 //			if (event == null) {
 //				try {
 //					Thread.sleep(4200);
@@ -146,38 +140,37 @@ public class ContractComplianceChecker {
 //				relevanceEngine.addEvent(event);
 //			}
 
-			response.add(processEvent(event));
-		}
-		return response;
-	}
+      response.add(processEvent(event));
+    }
+    return response;
+  }
 
-	/**
-	 * Process event.
-	 *
-	 * @param event
-	 *            the event
-	 * @return the cCC response
-	 */
-	public CCCResponse processEvent(Event event) {
-		// Feed events to RE
+  /**
+   * Process event.
+   *
+   * @param event the event
+   * @return the cCC response
+   */
+  public CCCResponse processEvent(Event event) {
+    // Feed events to RE
 
-		// Pause for 4.2 seconds whenever a null comes up
-		if (event == null) {
-			try {
-				Thread.sleep(4200);
-			} catch (InterruptedException e) {
-				ErrorMessageManager.fatalErrorMsg("Interrupted while waiting", e);
-			}
+    // Pause for 4.2 seconds whenever a null comes up
+    if (event == null) {
+      try {
+        Thread.sleep(4200);
+      } catch (InterruptedException e) {
+        ErrorMessageManager.fatalErrorMsg("Interrupted while waiting", e);
+      }
 
-		} else {
-			logger.logEvent(event);
-			relevanceEngine.addEvent(event);
-			return RelevanceEngine.getCCCResponse();
+    } else {
+      logger.logEvent(event);
+      relevanceEngine.addEvent(event);
+      return RelevanceEngine.getCCCResponse();
 
-		}
-		return null;
+    }
+    return null;
 
-	}
+  }
 
 
 }
